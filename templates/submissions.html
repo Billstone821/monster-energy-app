@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Form Submissions</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #10b981;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">All Form Submissions</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Street Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th>
+        <th>Preferred Contact</th>
+        <th>Age 18 or older?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for submission in submissions %}
+      <tr>
+        <td>{{ submission.id }}</td>
+        <td>{{ submission.name }}</td>
+        <td>{{ submission.email }}</td>
+        <td>{{ submission.phone }}</td>
+        <td>{{ submission.address }}</td>
+        <td>{{ submission.city }}</td>
+        <td>{{ submission.state }}</td>
+        <td>{{ submission.zip }}</td>
+        <td>{{ submission.contact_method }}</td>
+        <td>{{ submission.age }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="/admin">Back to Admin Dashboard</a> |
+    <a href="/logout">Logout</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monster Energy Drink® Advertising Campaign - Drive & Earn!</title>
+  <!-- Tailwind CSS CDN for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f3f4f6;
+    }
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
+    }
+    .slideshow-container {
+      max-width: 800px;
+      position: relative;
+      margin: auto;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    .mySlides {
+      display: none;
+      width: 100%;
+      height: auto;
+    }
+    .mySlides img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+    .text-caption {
+      color: #f2f2f2;
+      font-size: 15px;
+      padding: 8px 12px;
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(0,0,0,0.5);
+      border-radius: 0.5rem 0 0.5rem 0;
+    }
+    .dot {
+      cursor: pointer;
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+    .active-dot, .dot:hover {
+      background-color: #717171;
+    }
+    .fade {
+      animation-name: fade;
+      animation-duration: 1.5s;
+    }
+    @keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+    /* Chatbot styles */
+    .chat-bubble {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #10b981;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      z-index: 1000;
+      color: white;
+      font-size: 28px;
+    }
+    .chat-window {
+      display: none; /* Changed to none for initial hidden state */
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      flex-direction: column;
+      z-index: 1001;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+    }
+    .chat-header {
+      background-color: #10b981;
+      color: white;
+      padding: 12px 16px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-close-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+    .chat-messages {
+      flex-grow: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background-color: #f9fafb;
+      font-size: 14px;
+      color: #333;
+    }
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 8px;
+      background-color: #fff;
+    }
+    .chat-input {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: "Inter", sans-serif;
+    }
+    .chat-send-btn {
+      background-color: #10b981;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      margin-left: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .chat-send-btn:hover {
+      background-color: #0e9e6e;
+    }
+    /* Message styles for appendMessage */
+    .message.user {
+        text-align: right;
+        background-color: #e0f2f1; /* Light green */
+        padding: 6px 10px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        max-width: 80%;
+        margin-left: auto;
+    }
+    .message.bot {
+        text-align: left;
+        background-color: #e8e8e8; /* Light gray */
+        padding: 6px 10px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        max-width: 80%;
+        margin-right: auto;
+    }
+
+    /* --- Footer Example 1: Sleek & Modern (Modified for Logo Left) --- */
+    .footer-ex1 {
+        background-color: #1a1a1a; /* Dark background */
+        color: #e0e0e0; /* Light text color */
+        padding: 40px 20px; /* Generous padding */
+        text-align: center; /* Default text alignment for the footer */
+        border-top: 5px solid #00ff00; /* Bold Monster Green accent border at the top */
+        border-radius: 8px 8px 0 0; /* Rounded top corners for the footer */
+    }
+
+    /* Container for the main footer content */
+    .footer-ex1 .container {
+        max-width: 1200px; /* Maximum width for the content to keep it readable */
+        margin: 0 auto; /* Center the container */
+        display: flex; /* Enable flexbox for the main layout */
+        justify-content: space-between; /* Pushes logo area to left, content columns to right */
+        align-items: flex-start; /* Aligns items to the top of the container */
+        flex-wrap: wrap; /* Allows sections to wrap to the next line on smaller screens */
+        gap: 30px; /* Space between the logo area and content columns */
+    }
+
+    /* Styling for the new logo and copyright area on the left */
+    .footer-ex1 .footer-logo-area {
+        flex-shrink: 0; /* Prevents this area from shrinking */
+        text-align: left; /* Ensures content within is left-aligned */
+        min-width: 180px; /* Minimum width for the logo area */
+        max-width: 250px; /* Max width for the logo area */
+    }
+
+    /* Styling for the Monster Logo */
+    .footer-ex1 .footer-logo {
+        max-width: 200px; /* Size of the logo */
+        height: auto;
+        margin-bottom: 10px; /* Space below the logo */
+        border-radius: 5px; /* Slightly rounded corners for the logo if it's a solid block */
+    }
+
+    /* Styling for the copyright text directly under the logo */
+    .footer-ex1 .footer-copyright-text {
+        font-size: 0.8em; /* Smaller font size */
+        opacity: 0.6; /* More faded */
+        line-height: 1.5;
+    }
+
+    /* Container for the "Connect With Us" and "Our Location" columns */
+    .footer-ex1 .footer-content-cols {
+        display: flex; /* Enable flexbox for these columns */
+        flex-wrap: wrap; /* Allow columns to wrap */
+        justify-content: space-around; /* Distribute space evenly among these columns */
+        flex-grow: 1; /* Allows these columns to take up remaining space */
+        gap: 30px; /* Space between these columns */
+        min-width: 400px; /* Ensure content columns don't get too narrow */
+    }
+
+    /* Styling for each column (Connect With Us, Our Location) */
+    .footer-ex1 .col {
+        flex: 1; /* Allows columns to grow and shrink */
+        min-width: 220px; /* Minimum width before wrapping */
+        max-width: 300px; /* Maximum width for each column */
+        text-align: left; /* Text aligned to the left within each column */
+    }
+
+    /* Styling for column headings */
+    .footer-ex1 h3 {
+        color: #00ff00; /* Monster Green for headings */
+        margin-bottom: 15px; /* Space below heading */
+        font-size: 1.15em; /* Slightly larger font size */
+        font-weight: 600; /* Bolder font weight */
+    }
+
+    /* Styling for paragraphs and address text */
+    .footer-ex1 p, .footer-ex1 address {
+        font-size: 0.9em; /* Standard text size */
+        line-height: 1.6; /* Good line height for readability */
+        margin-bottom: 8px; /* Space between lines */
+        font-style: normal; /* Ensures address text is not italic */
+    }
+
+    /* Styling for links */
+    .footer-ex1 a {
+        color: #e0e0e0; /* Light text color for links */
+        text-decoration: none; /* No underline by default */
+        transition: color 0.3s ease; /* Smooth color transition on hover */
+    }
+
+    .footer-ex1 a:hover {
+        color: #00ff00; /* Monster Green on hover */
+    }
+
+    /* Styling for the "Terms and Conditions Apply" text */
+    .footer-ex1 .terms {
+        margin-top: 20px; /* Space above terms text */
+        font-size: 0.8em; /* Smaller font size */
+        opacity: 0.7; /* Slightly faded */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .footer-ex1 {
+            padding: 30px 15px; /* Reduce padding on smaller screens */
+        }
+        .footer-ex1 .container {
+            flex-direction: column; /* Stack all sections vertically */
+            align-items: center; /* Center items when stacked */
+            gap: 25px; /* Adjust gap when stacked */
+        }
+        .footer-ex1 .footer-logo-area,
+        .footer-ex1 .footer-content-cols {
+            min-width: unset; /* Remove min-width constraints */
+            max-width: 90%; /* Allow sections to take more width on small screens */
+            width: 100%; /* Take full width when stacked */
+            text-align: center; /* Center content within these sections */
+        }
+        .footer-ex1 .col {
+            min-width: unset;
+            max-width: 100%; /* Allow individual columns to take full width */
+            text-align: center; /* Center text within columns when stacked */
+        }
+        .footer-ex1 .footer-logo {
+            max-width: 120px; /* Slightly smaller logo on mobile */
+        }
+        .footer-ex1 .terms {
+            text-align: center; /* Ensure terms are centered */
+        }
+    }
+  </style>
+
+  <!-- Google reCAPTCHA v2 -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+    <header class="bg-gray-900 text-white p-6 sm:p-8 text-center rounded-t-lg">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2">
+        <span class="text-green-500">MONSTER</span> ENERGY DRINK® ADVERTISING CAMPAIGN
+      </h1>
+      <p class="text-gray-300 text-lg sm:text-xl">Earn by Driving Your Own Vehicle!</p>
+    </header>
+
+    <main class="p-6 sm:p-8 md:p-10">
+      <section class="mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Key Information About Our Advertising Campaign</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Monster Energy Drink® is seeking individuals who are residents of the United States to participate in our exciting advertising campaign. This unique opportunity allows you to earn money by simply driving your personal vehicle, featuring our brand's advertisement.
+        </p>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">How Our Program Works:</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Our "Paid to Drive" program enables participants to earn $500.00 weekly over a 12-week period. We seek individuals who can seamlessly integrate our vehicle advertisements into their regular driving routines. Participants will display a Monster Energy Drink® advertisement on their Car, Truck, Van, Motorcycle, or Boat. Our high-quality decals are vehicle-safe, ensuring no damage to your paintwork and maintaining a professional appearance.
+        </p>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Participants chosen for the campaign will feature the advertisement on their vehicle's exterior. For this valuable advertising space, a weekly fee of $500.00 will be compensated. Monster Energy Drink® coordinates certified professionals to apply and remove the vehicle decals, ensuring your vehicle's original condition is maintained.
+        </p>
+      </section>
+
+      <!-- Slideshow Section -->
+      <section class="mb-10">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">See Our Ads in Action</h2>
+
+        <div class="slideshow-container bg-gray-100 shadow-md">
+          <div class="mySlides fade">
+            <div class="numbertext">1 / 4</div>
+            <img src="{{ url_for('static', filename='Image/img1.jpg') }}" alt="Monster Energy Wrapped Car 1" />
+            <div class="text-caption">Dynamic Car Wrap</div>
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">2 / 4</div>
+            <img src="{{ url_for('static', filename='Image/img2.jpg') }}" alt="Monster Energy Wrapped Truck" />
+            <div class="text-caption">Bold Truck Advertisement</div>
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">3 / 4</div>
+            <img src="{{ url_for('static', filename='Image/img3.jpg') }}" alt="Monster Energy Wrapped Van" />
+            <div class="text-caption">Eye-Catching Van Wrap</div>
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">4 / 4</div>
+            <img src="{{ url_for('static', filename='Image/img4.jpg') }}" alt="Monster Energy Wrapped Motorcycle" />
+            <div class="text-caption">Sleek Motorcycle Decal</div>
+          </div>
+
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+        <br />
+        <div style="text-align:center;">
+          <span class="dot" onclick="currentSlide(1)"></span>
+          <span class="dot" onclick="currentSlide(2)"></span>
+          <span class="dot" onclick="currentSlide(3)"></span>
+          <span class="dot" onclick="currentSlide(4)"></span>
+        </div>
+        <p class="text-center text-gray-500 text-sm mt-6"><em>(Images are illustrative. Actual designs may vary.)</em></p>
+      </section>
+
+      <section class="mb-10">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Important Notice:</h2>
+        <p class="text-gray-700 leading-relaxed bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-md">
+          <strong>Essential Info</strong> please complete the application form below. Our team will respond once we receive your application within 2-3 business days via your preferred contact method (text, email, or WhatsApp).
+        </p>
+      </section>
+
+      <!-- Application Form with reCAPTCHA -->
+      <section class="bg-gray-50 p-6 sm:p-8 rounded-lg shadow-inner">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6">Application Form</h2>
+        <form
+          id="applicationForm"
+          class="space-y-4"
+          method="POST"
+          action="/submit"
+          onsubmit="return validateRecaptcha();"
+        >
+          <div>
+            <label for="fullName" class="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              name="name"
+              required
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div>
+            <label for="phone" class="block text-gray-700 text-sm font-medium mb-1">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700 text-sm font-medium mb-1">Preferred Contact Method</label>
+            <div class="flex flex-wrap items-center space-x-4">
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="contact_method"
+                  value="email"
+                  required
+                  class="form-radio h-4 w-4 text-green-600"
+                />
+                <span class="ml-2 text-gray-700">Email</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="contact_method"
+                  value="text"
+                  class="form-radio h-4 w-4 text-green-600"
+                />
+                <span class="ml-2 text-gray-700">Text Message</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="contact_method"
+                  value="whatsapp"
+                  class="form-radio h-4 w-4 text-green-600"
+                />
+                <span class="ml-2 text-gray-700">WhatsApp</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label for="address" class="block text-gray-700 text-sm font-medium mb-1">Street Address</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              required
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label for="city" class="block text-gray-700 text-sm font-medium mb-1">City</label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                required
+                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
+            <div>
+              <label for="state" class="block text-gray-700 text-sm font-medium mb-1">State/Region</label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                required
+                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
+            <div>
+              <label for="zip" class="block text-gray-700 text-sm font-medium mb-1">Zip/Postal Code</label>
+              <input
+                type="text"
+                id="zip"
+                name="zip"
+                required
+                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-700 text-sm font-medium mb-1">Are you 18 years or older?</label>
+            <div class="flex items-center space-x-4">
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="age"
+                  value="yes"
+                  required
+                  class="form-radio h-4 w-4 text-green-600"
+                />
+                <span class="ml-2 text-gray-700">Yes</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="age"
+                  value="no"
+                  class="form-radio h-4 w-4 text-red-600"
+                />
+                <span class="ml-2 text-gray-700">No</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Google reCAPTCHA widget -->
+          <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+          <p id="recaptchaError" class="text-red-600 text-sm mt-2 hidden">
+            Please verify that you are not a robot.
+          </p>
+
+          <button
+            type="submit"
+            class="w-full bg-green-600 text-white py-3 rounded-md font-semibold text-lg hover:bg-green-700 transition duration-300 ease-in-out shadow-md"
+          >
+            Submit Application
+          </button>
+          <p class="text-center text-gray-500 text-xs mt-4">
+            <em>Brand-Affiliated Transparency: This promotion is part of a Monster Energy advertising campaign. We will never ask for payment. Qualified applicants will be contacted.</em>
+          </p>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- The Footer HTML for Option 1 (Modified for Logo Left) -->
+    <footer class="footer-ex1">
+        <div class="container">
+            <div class="footer-logo-area">
+                <!-- Replace 'static/Image/monster_logo.png' with your actual logo path -->
+                <img src="static/Image/monster_logo.png" alt="Monster Energy Logo" class="footer-logo">
+                <p class="footer-copyright-text">&copy; 2024 Monster Energy. All Rights Reserved.</p>
+            </div>
+            <div class="footer-content-cols">
+                <div class="col">
+                    <h3>Contact Us</h3>
+                    <p>Email: <a href="mailto:info@monsterenergy.com">info@monsterenergy.com</a></p>
+                    <p>Phone: +1 (800) 762-2776</p>
+                    <p>Follow Us: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">X</a></p>
+                </div>
+                <div class="col">
+                    <h3>Headquarters Address</h3>
+                    <address>
+                        Monster Energy Company<br>
+                        1 Monster Way<br>
+                        Corona, CA 92879, USA
+                    </address>
+                    <p class="terms">Terms and Conditions Apply.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+  </div>
+          
+  <!-- Chatbot -->
+  <div class="chat-bubble" id="chatBubble" title="Chat with us!">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <div class="chat-window" id="chatWindow" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+    <div class="chat-header">
+      <h2 id="chatTitle">Chat</h2>
+      <button aria-label="Close chat" class="chat-close-btn" id="chatCloseBtn">&times;</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." aria-label="Chat input" />
+      <button id="chatSendBtn" class="chat-send-btn">Send</button>
+    </div>
+  </div>
+
+<script>
+  // Slideshow JS
+  let slideIndex = 1;
+  let slideshowTimer;
+
+  function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+    if (n > slides.length) slideIndex = 1;
+    if (n < 1) slideIndex = slides.length;
+    for (i = 0; i < slides.length; i++) slides[i].style.display = "none";
+    for (i = 0; i < dots.length; i++) dots[i].className = dots[i].className.replace(" active-dot", "");
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].className += " active-dot";
+  }
+
+  function plusSlides(n) {
+    clearTimeout(slideshowTimer);
+    showSlides(slideIndex += n);
+    slideshowTimer = setTimeout(() => plusSlides(1), 4000); // Restart auto-advance
+  }
+
+  function currentSlide(n) {
+    clearTimeout(slideshowTimer);
+    showSlides(slideIndex = n);
+    slideshowTimer = setTimeout(() => plusSlides(1), 4000); // Restart auto-advance
+  }
+
+  function autoShowSlides() {
+    plusSlides(1); // Advance to the next slide automatically
+  }
+
+  showSlides(slideIndex);
+  slideshowTimer = setTimeout(autoShowSlides, 4000); // Start initial auto-advance
+
+  // reCAPTCHA validation before form submit
+  function validateRecaptcha() {
+    const response = grecaptcha.getResponse();
+    const errorMsg = document.getElementById("recaptchaError");
+    if (response.length === 0) {
+      errorMsg.classList.remove("hidden");
+      return false;
+    }
+    errorMsg.classList.add("hidden");
+    return true;
+  }
+
+  // Chatbot Logic
+  const chatBubble = document.getElementById("chatBubble");
+  const chatWindow = document.getElementById("chatWindow");
+  const chatCloseBtn = document.getElementById("chatCloseBtn");
+  const chatSendBtn = document.getElementById("chatSendBtn");
+  const chatMessages = document.getElementById("chatMessages");
+  const chatInput = document.getElementById("chatInput");
+
+  let conversationHistory = []; // Defined once globally
+
+  // Helper to append messages
+  function appendMessage(role, content) {
+    const msgDiv = document.createElement('p');
+    msgDiv.className = `message ${role}`; // Add role-specific class for styling
+    msgDiv.innerText = role === 'user' ? `You: ${content}` : `Chat: ${content}`;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to latest message
+  }
+
+  async function sendInitialBotGreeting() {
+    // Only send if conversationHistory is empty (first load)
+    if (conversationHistory.length === 0) {
+        // Immediately make the chat window visible and hide the chat bubble
+        chatWindow.style.display = "flex";
+        chatBubble.style.display = "none";
+        chatInput.focus(); // Focus the input for convenience
+
+        const typingIndicator = document.createElement("p");
+        typingIndicator.id = "typingIndicator";
+        typingIndicator.style.fontStyle = "italic";
+        typingIndicator.style.marginBottom = "8px";
+        typingIndicator.textContent = "Chat: typing...";
+        chatMessages.appendChild(typingIndicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('/chat/greeting', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            typingIndicator.remove();
+            const data = await response.json();
+            conversationHistory = data.history;
+
+            appendMessage('bot', data.response);
+        } catch (error) {
+            typingIndicator.remove();
+            appendMessage('bot', "Failed to load initial greeting.");
+            console.error("Error fetching initial greeting:", error);
+        }
+    }
+  }
+
+  async function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    appendMessage('user', message);
+    chatInput.value = ""; // Clear input field
+
+    const typingIndicator = document.createElement("p");
+    typingIndicator.id = "typingIndicator";
+    typingIndicator.style.fontStyle = "italic";
+    typingIndicator.style.marginBottom = "8px";
+    typingIndicator.textContent = "Chat: typing...";
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    try {
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history: conversationHistory })
+      });
+
+      typingIndicator.remove();
+      const data = await response.json();
+      conversationHistory = data.history;
+
+      appendMessage('bot', data.response);
+    } catch (error) {
+      typingIndicator.remove();
+      appendMessage('bot', "Sorry, something went wrong.");
+      console.error("Error sending message:", error);
+    }
+  }
+
+  // Event Listeners for Chatbot
+  chatBubble?.addEventListener("click", () => {
+    chatWindow.style.display = "flex";
+    chatBubble.style.display = "none";
+    chatInput.focus();
+  });
+
+  chatCloseBtn?.addEventListener("click", () => {
+    chatWindow.style.display = "none";
+    chatBubble.style.display = "flex";
+  });
+
+  chatSendBtn?.addEventListener("click", sendMessage);
+  chatInput?.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Automatically trigger initial greeting when the page loads
+  window.addEventListener('load', sendInitialBotGreeting);
+
+</script>
+</body>
+</html>

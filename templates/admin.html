@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Submissions</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #4CAF50; color: white; }
+    tr:nth-child(even) { background-color: #f2f2f2; }
+    h1 { margin-bottom: 20px; }
+    a.logout { display: inline-block; margin-top: 20px; color: #f44336; text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard - Form Submissions</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th>
+        <th>Contact Method</th>
+        <th>Age 18+</th>
+        <th>Submitted At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for submission in submissions %}
+      <tr>
+        <td>{{ submission.id }}</td>
+        <td>{{ submission.name }}</td>
+        <td>{{ submission.email }}</td>
+        <td>{{ submission.phone }}</td>
+        <td>{{ submission.address }}</td>
+        <td>{{ submission.city }}</td>
+        <td>{{ submission.state }}</td>
+        <td>{{ submission.zip }}</td>
+        <td>{{ submission.contact_method }}</td>
+        <td>{{ submission.age }}</td>
+        <td>{{ submission.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="11" style="text-align:center;">No submissions found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="/logout" class="logout">Logout</a>
+</body>
+</html>
