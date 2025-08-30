@@ -9,16 +9,13 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Email, To, PlainTextContent, Mail # ADDED Mail here
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
-from rag_utils import load_webpage_content_for_rag, retrieve_relevant_chunks
 from dotenv import load_dotenv
 
 # Load environment variables from .env file at the very beginning
 load_dotenv()
 
 # --- Configuration from .env ---
-API_KEY = os.getenv("GEMINI_API_KEY")
+# Removed GEMINI_API_KEY as it's no longer needed for the chatbot
 SECRET_KEY = os.getenv("SECRET_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
@@ -30,8 +27,7 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY") # New: reCAPTCHA Secret Key
 
 # --- Environment Variable Checks ---
-if not API_KEY:
-    raise ValueError("GEMINI_API_KEY is missing from .env. Please set it to run the application.")
+# Removed the check for GEMINI_API_KEY
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY is missing from .env. Please set it for Flask sessions.")
 if not DATABASE_URL:
@@ -107,30 +103,9 @@ class AuthenticatedModelView(ModelView):
 admin = Admin(app, name='Monster Admin', template_mode='bootstrap3')
 admin.add_view(AuthenticatedModelView(Submission, db.session))
 
-# --- RAG Retriever Initialization ---
+# Removed RAG and Gemini LLM initialization blocks
 rag_retriever = None
-
-# Initialize RAG retriever within an app context when the app starts
-with app.app_context():
-    try:
-        index_html_path = os.path.join(app.root_path, 'templates', 'index.html')
-        print(f"[DEBUG] Attempting to load index.html for RAG from: {index_html_path}")
-        rag_retriever = load_webpage_content_for_rag(index_html_path)
-        if rag_retriever:
-            print("[INFO] index.html content loaded and indexed for RAG successfully.")
-        else:
-            print("[ERROR] RAG retriever could not be created. Check rag_utils.py errors.")
-    except Exception as e:
-        print(f"[CRITICAL ERROR] Failed to initialize RAG retriever: {e}")
-        rag_retriever = None
-
-# --- Generative AI Model Initialization ---
-try:
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.2, google_api_key=API_KEY)
-    print("[INFO] Gemini LLM initialized successfully.")
-except Exception as e:
-    print(f"[CRITICAL ERROR] Failed to initialize Gemini LLM: {e}")
-    llm = None
+llm = None
 
 # --- Routes ---
 @app.route('/')
@@ -141,89 +116,8 @@ def index():
 def thankyou_page():
     return render_template('thank_you.html')
 
-@app.route('/chat/greeting', methods=['GET'])
-def get_initial_greeting():
-    initial_message = "Hello! I'm Rose, Welcome to Monster Energy Pay to Drive Program! Let me know how i can assist you today"
-    history = [
-        SystemMessage(content="You are a friendly and helpful Monster Energy Drink advertising campaign assistant. Your goal is to answer user questions accurately and concisely based *only* on the information provided in the Monster Energy Drink 'Drive & Earn' campaign webpage. Do not invent information. Do not use phrases like 'Based on the provided information', 'The text states', 'According to the document', 'The webpage says', or similar explicit citations. Just directly answer the question using the information you have. If the information is not available in the webpage, state that you cannot find the answer there. Maintain a positive and energetic tone."),
-        AIMessage(content=initial_message)
-    ]
-    # Use model_dump() instead of dict() to avoid PydanticDeprecatedSince20 warning
-    session['chat_history'] = [msg.model_dump() for msg in history]
-    return jsonify({"response": initial_message, "history": [msg.model_dump() for msg in history]})
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_message_text = request.json.get('message')
-    conversation_history_dicts = session.get('chat_history', [])
-
-    conversation_history = []
-    for msg_dict in conversation_history_dicts:
-        if msg_dict['type'] == 'human':
-            conversation_history.append(HumanMessage(content=msg_dict['content']))
-        elif msg_dict['type'] == 'ai':
-            conversation_history.append(AIMessage(content=msg_dict['content']))
-        elif msg_dict['type'] == 'system':
-            conversation_history.append(SystemMessage(content=msg_dict['content']))
-
-    if not user_message_text:
-        return jsonify({"response": "Please type a message.", "history": conversation_history_dicts}), 400
-
-    context_chunks = []
-    if rag_retriever:
-        try:
-            context_chunks = retrieve_relevant_chunks(rag_retriever, user_message_text)
-            print(f"[INFO] Retrieved {len(context_chunks)} context chunks for RAG.")
-        except Exception as e:
-            print(f"[ERROR] Error retrieving context chunks for RAG: {e}")
-    else:
-        print("[WARNING] RAG retriever not initialized. Chatbot will respond without document context.")
-
-    rag_context_str = "\n".join([chunk.page_content for chunk in context_chunks])
-
-    if not rag_context_str:
-        system_prompt_content = "You are a friendly and helpful Monster Energy Drink advertising campaign assistant. Your goal is to answer user questions accurately and concisely. Do not invent information. If you cannot find the answer, state that you cannot find the answer. Maintain a positive and energetic tone. The information from the webpage is currently unavailable."
-    else:
-        system_prompt_content = f"""You are a friendly and helpful Monster Energy Drink advertising campaign assistant.
-Your goal is to answer user questions accurately and concisely based *only* on the following information from the Monster Energy Drink 'Drive & Earn' campaign webpage:
-
----
-{rag_context_str}
----
-
-Do not invent information. Do not use phrases like 'Based on the provided information', 'The text states', 'According to the document', 'The webpage says', or similar explicit citations. Just directly answer the question using the information you have. If the information is not available in the webpage, state that you cannot find the answer there. Maintain a positive and energetic tone.
-"""
-
-    if conversation_history and isinstance(conversation_history[0], SystemMessage):
-        conversation_history[0].content = system_prompt_content
-    else:
-        conversation_history.insert(0, SystemMessage(content=system_prompt_content))
-
-    conversation_history.append(HumanMessage(content=user_message_text))
-
-    try:
-        if llm is None:
-            raise RuntimeError("LLM not initialized. Cannot generate response.")
-
-        print("[DEBUG] Attempting to invoke LLM for user query...")
-        ai_response = llm.invoke(conversation_history)
-        response_text = ai_response.content
-        print("[DEBUG] LLM invoked successfully. Response received.")
-
-        conversation_history.append(AIMessage(content=response_text))
-        # Use model_dump() instead of dict() to avoid PydanticDeprecatedSince20 warning
-        session['chat_history'] = [msg.model_dump() for msg in conversation_history]
-
-        return jsonify({"response": response_text, "history": [msg.model_dump() for msg in conversation_history]})
-    except Exception as e:
-        print(f"[CRITICAL ERROR] Error during LLM invocation or chat processing: {e}")
-        if conversation_history and isinstance(conversation_history[-1], HumanMessage):
-            conversation_history.pop()
-        session['chat_history'] = [msg.model_dump() for msg in conversation_history]
-        return jsonify({
-            "response": "Sorry, I'm currently experiencing a technical issue and cannot respond. Please try again in a moment.",
-            "history": [msg.model_dump() for msg in conversation_history]
-        }), 500
+# Removed all chatbot-related routes, including /chat/greeting and /chat
+# No more session['chat_history'] usage.
 
 @app.route('/submit', methods=['POST'])
 def submit_application():
@@ -339,6 +233,6 @@ if __name__ == '__main__':
         #db.drop_all()
         #db.create_all()
         #print("[INFO] Database tables DROPPED and RECREATED for debugging.")
-         pass # Add this line to satisfy the 'with' statement's indentation requirement
+        pass # Add this line to satisfy the 'with' statement's indentation requirement
     # --- END TEMPORARY DATABASE RESET ---
     app.run(debug=False, host='0.0.0.0') # Changed host to '0.0.0.0'
