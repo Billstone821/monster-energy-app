@@ -8,14 +8,13 @@ from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Email, To, PlainTextContent, Mail # ADDED Mail here
+from sendgrid.helpers.mail import Email, To, PlainTextContent, Mail
 from dotenv import load_dotenv
 
 # Load environment variables from .env file at the very beginning
 load_dotenv()
 
 # --- Configuration from .env ---
-# Removed GEMINI_API_KEY as it's no longer needed for the chatbot
 SECRET_KEY = os.getenv("SECRET_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
@@ -24,10 +23,9 @@ FROM_EMAIL = os.getenv("FROM_EMAIL")
 REPLY_TO_EMAIL = os.getenv("REPLY_TO")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
-RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY") # New: reCAPTCHA Secret Key
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 
 # --- Environment Variable Checks ---
-# Removed the check for GEMINI_API_KEY
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY is missing from .env. Please set it for Flask sessions.")
 if not DATABASE_URL:
@@ -43,14 +41,14 @@ if not RECAPTCHA_SECRET_KEY:
 
 
 # --- Flask App Initialization ---
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # --- Database Initialization ---
 db = SQLAlchemy(app)
-migrate = Migrate(app, db) # Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 # --- Database Model ---
 class Submission(db.Model):
@@ -92,7 +90,7 @@ class AuthenticatedModelView(ModelView):
                     return False
         except Exception as e:
             print(f"[ERROR] Error parsing Authorization header: {e}. Returning False.")
-            pass # Continue to return False if parsing fails
+            pass
         print("[DEBUG] Fallback: Returning False (e.g., non-basic auth or other error).")
         return False
 
@@ -103,10 +101,6 @@ class AuthenticatedModelView(ModelView):
 admin = Admin(app, name='Monster Admin', template_mode='bootstrap3')
 admin.add_view(AuthenticatedModelView(Submission, db.session))
 
-# Removed RAG and Gemini LLM initialization blocks
-rag_retriever = None
-llm = None
-
 # --- Routes ---
 @app.route('/')
 def index():
@@ -116,12 +110,10 @@ def index():
 def thankyou_page():
     return render_template('thank_you.html')
 
-# Removed all chatbot-related routes, including /chat/greeting and /chat
-# No more session['chat_history'] usage.
-
 @app.route('/submit', methods=['POST'])
 def submit_application():
     try:
+        # Corrected variable names to match index.html form inputs
         full_name = request.form.get('name')
         email = request.form.get('email')
         phone = request.form.get('phone')
@@ -130,7 +122,7 @@ def submit_application():
         city = request.form.get('city')
         state = request.form.get('state')
         zip_code = request.form.get('zip')
-        age_18_plus = request.form.get('age') == 'yes'
+        age_18_plus = request.form.get('age') == 'yes' # Boolean check
         recaptcha_response = request.form.get('g-recaptcha-response')
 
         # --- Server-side reCAPTCHA verification ---
@@ -139,12 +131,11 @@ def submit_application():
             flash('Please complete the reCAPTCHA verification.', 'error')
             return redirect(url_for('index'))
 
-        # Google reCAPTCHA verification URL
         recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
         recaptcha_payload = {
             'secret': RECAPTCHA_SECRET_KEY,
             'response': recaptcha_response,
-            'remoteip': request.remote_addr # Optional: IP address of the user
+            'remoteip': request.remote_addr
         }
 
         try:
@@ -156,18 +147,12 @@ def submit_application():
                 print(f"[ERROR] reCAPTCHA verification failed: {recaptcha_result.get('error-codes')}")
                 flash('reCAPTCHA verification failed. Please try again.', 'error')
                 return redirect(url_for('index'))
-            # Optional: Check score for reCAPTCHA v3, if implemented
-            # if recaptcha_result.get('score', 0) < 0.5:
-            #     print("[WARNING] reCAPTCHA score too low, likely bot.")
-            #     flash('reCAPTCHA verification failed (low score). Please try again.', 'error')
-            #     return redirect(url_for('index'))
-
         except requests.exceptions.RequestException as e:
             print(f"[CRITICAL ERROR] reCAPTCHA API request failed: {e}")
             flash('reCAPTCHA service unavailable. Please try again later.', 'error')
             return redirect(url_for('index'))
+        
         # --- End of Server-side reCAPTCHA verification ---
-
 
         new_submission = Submission(
             full_name=full_name,
@@ -202,7 +187,7 @@ def submit_application():
             to_email_obj = To(NOTIFY_EMAIL)
             plain_text_content = PlainTextContent(message_content)
             
-            mail_message = Mail( # Changed from sendgrid.helpers.mail.Mail to Mail
+            mail_message = Mail(
                 from_email_obj,
                 to_email_obj,
                 "New Monster Energy Campaign Application",
@@ -222,17 +207,12 @@ def submit_application():
         db.session.rollback()
         print(f"[CRITICAL ERROR] Error processing form submission: {e}")
         flash('Your application could not be submitted due to a server error. Please try again.', 'error')
-        return redirect(url_for('index')) # No error parameter needed, flash handles it
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # --- TEMPORARY DATABASE RESET FOR DEBUGGING ---
-    # These lines will drop all tables and recreate them based on your models.
-    # THIS SHOULD ONLY BE RUN ONCE FOR INITIAL SETUP OR WHEN SCHEMA IS BROKEN.
-    # AFTER THE FIRST SUCCESSFUL RUN, COMMENT THESE TWO LINES OUT AGAIN.
     with app.app_context():
-        #db.drop_all()
-        #db.create_all()
-        #print("[INFO] Database tables DROPPED and RECREATED for debugging.")
-        pass # Add this line to satisfy the 'with' statement's indentation requirement
-    # --- END TEMPORARY DATABASE RESET ---
-    app.run(debug=False, host='0.0.0.0') # Changed host to '0.0.0.0'
+        # DO NOT uncomment these lines unless you want to reset your database entirely.
+        # db.drop_all()
+        # db.create_all()
+        pass
+    app.run(debug=True, host='0.0.0.0')
