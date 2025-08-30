@@ -1,454 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Monster Energy Drink® Advertising Campaign - Drive & Earn!</title>
-  <!-- Tailwind CSS CDN for styling -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  />
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  />
-  <style>
-    body {
-      font-family: "Inter", sans-serif;
-      background-color: #f3f4f6;
-    }
-    input:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: #10b981;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
-    }
-    .slideshow-container {
-      max-width: 800px;
-      position: relative;
-      margin: auto;
-      border-radius: 0.5rem;
-      overflow: hidden;
-    }
-    .mySlides {
-      display: none;
-      width: 100%;
-      height: auto;
-    }
-    .mySlides img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 0.5rem;
-    }
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      width: auto;
-      padding: 16px;
-      margin-top: -22px;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      transition: 0.6s ease;
-      border-radius: 0 3px 3px 0;
-      user-select: none;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 10;
-    }
-    .next {
-      right: 0;
-      border-radius: 3px 0 0 3px;
-    }
-    .prev:hover, .next:hover {
-      background-color: rgba(0,0,0,0.8);
-    }
-    .text-caption {
-      color: #f2f2f2;
-      font-size: 15px;
-      padding: 8px 12px;
-      position: absolute;
-      bottom: 8px;
-      width: 100%;
-      text-align: center;
-      background-color: rgba(0,0,0,0.5);
-    }
-    .numbertext {
-      color: #f2f2f2;
-      font-size: 12px;
-      padding: 8px 12px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: rgba(0,0,0,0.5);
-      border-radius: 0.5rem 0 0.5rem 0;
-    }
-    .dot {
-      cursor: pointer;
-      height: 15px;
-      width: 15px;
-      margin: 0 2px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.6s ease;
-    }
-    .active-dot, .dot:hover {
-      background-color: #717171;
-    }
-    .fade {
-      animation-name: fade;
-      animation-duration: 1.5s;
-    }
-    @keyframes fade {
-      from {opacity: .4}
-      to {opacity: 1}
-    }
-
-    /* --- Footer Example 1: Sleek & Modern (Modified for Logo Left) --- */
-    .footer-ex1 {
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-        padding: 40px 20px;
-        text-align: center;
-        border-top: 5px solid #00ff00;
-        border-radius: 8px 8px 0 0;
-    }
-    .footer-ex1 .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        gap: 30px;
-    }
-    .footer-ex1 .footer-logo-area {
-        flex-shrink: 0;
-        text-align: left;
-        min-width: 180px;
-        max-width: 250px;
-    }
-    .footer-ex1 .footer-logo {
-        max-width: 200px;
-        height: auto;
-        margin-bottom: 10px;
-        border-radius: 5px;
-    }
-    .footer-ex1 .footer-copyright-text {
-        font-size: 0.8em;
-        opacity: 0.6;
-        line-height: 1.5;
-    }
-    .footer-ex1 .footer-content-cols {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        flex-grow: 1;
-        gap: 30px;
-        min-width: 400px;
-    }
-    .footer-ex1 .col {
-        flex: 1;
-        min-width: 220px;
-        max-width: 300px;
-        text-align: left;
-    }
-    .footer-ex1 h3 {
-        color: #00ff00;
-        margin-bottom: 15px;
-        font-size: 1.15em;
-        font-weight: 600;
-    }
-    .footer-ex1 p, .footer-ex1 address {
-        font-size: 0.9em;
-        line-height: 1.6;
-        margin-bottom: 8px;
-        font-style: normal;
-    }
-    .footer-ex1 a {
-        color: #e0e0e0;
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-    .footer-ex1 a:hover {
-        color: #00ff00;
-    }
-    .footer-ex1 .terms {
-        margin-top: 20px;
-        font-size: 0.8em;
-        opacity: 0.7;
-    }
-    @media (max-width: 768px) {
-        .footer-ex1 {
-            padding: 30px 15px;
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Monster Energy Drink® Advertising Campaign - Drive & Earn!</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f3f4f6;
         }
-        .footer-ex1 .container {
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
         }
-        .footer-ex1 .footer-logo-area,
-        .footer-ex1 .footer-content-cols {
-            min-width: unset;
-            max-width: 90%;
+        .slideshow-container {
+            max-width: 800px;
+            position: relative;
+            margin: auto;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .mySlides {
+            display: none;
+            width: 100%;
+            height: auto;
+        }
+        .mySlides img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        .text-caption {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
             width: 100%;
             text-align: center;
+            background-color: rgba(0,0,0,0.5);
         }
-        .footer-ex1 .col {
-            min-width: unset;
-            max-width: 100%;
-            text-align: center;
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 0.5rem 0 0.5rem 0;
         }
-        .footer-ex1 .footer-logo {
-            max-width: 120px;
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
         }
-        .footer-ex1 .terms {
-            text-align: center;
+        .active-dot, .dot:hover {
+            background-color: #717171;
         }
-    }
-  </style>
+        .fade {
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+        @keyframes fade {
+            from {opacity: .4}
+            to {opacity: 1}
+        }
+    </style>
 
-  <!-- Google reCAPTCHA v2 -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Google reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
 
-  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
-    <header class="bg-gray-900 text-white p-6 sm:p-8 text-center rounded-t-lg">
-      <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2">
-        <span class="text-green-500">MONSTER</span> ENERGY DRINK® ADVERTISING CAMPAIGN
-      </h1>
-      <p class="text-gray-300 text-lg sm:text-xl">Earn by Driving Your Own Vehicle!</p>
-    </header>
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+        <header class="bg-gray-900 text-white p-6 sm:p-8 text-center rounded-t-lg">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2">
+                <span class="text-green-500">MONSTER</span> ENERGY DRINK® ADVERTISING CAMPAIGN
+            </h1>
+            <p class="text-gray-300 text-lg sm:text-xl">Earn by Driving Your Own Vehicle!</p>
+        </header>
 
-    <main class="p-6 sm:p-8 md:p-10">
-      <section class="mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Key Information About Our Advertising Campaign</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          Monster Energy Drink® is seeking individuals who are residents of the United States to participate in our exciting advertising campaign. This unique opportunity allows you to earn money by simply driving your personal vehicle, featuring our brand's advertisement.
-        </p>
-      </section>
+        <main class="p-6 sm:p-8 md:p-10">
+            <section class="mb-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Key Information About Our Advertising Campaign</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Monster Energy Drink® is seeking individuals who are residents of the United States to participate in our exciting advertising campaign. This unique opportunity allows you to earn money by simply driving your personal vehicle, featuring our brand's advertisement.
+                </p>
+            </section>
 
-      <section class="mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">How Our Program Works:</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          Our "Paid to Drive" program enables participants to earn $500.00 weekly over a 12-week period. We seek individuals who can seamlessly integrate our vehicle advertisements into their regular driving routines. Participants will display a Monster Energy Drink® advertisement on their Car, Truck, Van, Motorcycle, or Boat. Our high-quality decals are vehicle-safe, ensuring no damage to your paintwork and maintaining a professional appearance.
-        </p>
-        <p class="text-gray-700 leading-relaxed mb-4">
-          Participants chosen for the campaign will feature the advertisement on their vehicle's exterior. For this valuable advertising space, a weekly fee of $500.00 will be compensated. Monster Energy Drink® coordinates certified professionals to apply and remove the vehicle decals, ensuring your vehicle's original condition is maintained.
-        </p>
-      </section>
+            <section class="mb-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">How Our Program Works:</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Our "Paid to Drive" program enables participants to earn $500.00 weekly over a 12-week period. We seek individuals who can seamlessly integrate our vehicle advertisements into their regular driving routines. Participants will display a Monster Energy Drink® advertisement on their Car, Truck, Van, Motorcycle, or Boat. Our high-quality decals are vehicle-safe, ensuring no damage to your paintwork and maintaining a professional appearance.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Participants chosen for the campaign will feature the advertisement on their vehicle's exterior. For this valuable advertising space, a weekly fee of $500.00 will be compensated. Monster Energy Drink® coordinates certified professionals to apply and remove the vehicle decals, ensuring your vehicle's original condition is maintained.
+                </p>
+            </section>
 
-      <!-- Slideshow Section -->
-      <section class="mb-10">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">See Our Ads in Action</h2>
+            <!-- Slideshow Section -->
+            <section class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">See Our Ads in Action</h2>
 
-        <div class="slideshow-container bg-gray-100 shadow-md">
-          <div class="mySlides fade">
-            <div class="numbertext">1 / 4</div>
-            <img src="{{ url_for('static', filename='Image/img1.jpg') }}" alt="Monster Energy Wrapped Car 1" />
-            <div class="text-caption">Dynamic Car Wrap</div>
-          </div>
-          <div class="mySlides fade">
-            <div class="numbertext">2 / 4</div>
-            <img src="{{ url_for('static', filename='Image/img2.jpg') }}" alt="Monster Energy Wrapped Truck" />
-            <div class="text-caption">Bold Truck Advertisement</div>
-          </div>
-          <div class="mySlides fade">
-            <div class="numbertext">3 / 4</div>
-            <img src="{{ url_for('static', filename='Image/img3.jpg') }}" alt="Monster Energy Wrapped Van" />
-            <div class="text-caption">Eye-Catching Van Wrap</div>
-          </div>
-          <div class="mySlides fade">
-            <div class="numbertext">4 / 4</div>
-            <img src="{{ url_for('static', filename='Image/img4.jpg') }}" alt="Monster Energy Wrapped Motorcycle" />
-            <div class="text-caption">Sleek Motorcycle Decal</div>
-          </div>
+                <div class="slideshow-container bg-gray-100 shadow-md">
+                    <div class="mySlides fade">
+                        <div class="numbertext">1 / 4</div>
+                        <img src="{{ url_for('static', filename='Image/img1.jpg') }}" alt="Monster Energy Wrapped Car 1" />
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">2 / 4</div>
+                        <img src="{{ url_for('static', filename='Image/img2.jpg') }}" alt="Monster Energy Wrapped Truck" />
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">3 / 4</div>
+                        <img src="{{ url_for('static', filename='Image/img3.jpg') }}" alt="Monster Energy Wrapped Van" />
+                    </div>
+                    <div class="mySlides fade">
+                        <div class="numbertext">4 / 4</div>
+                        <img src="{{ url_for('static', filename='Image/img4.jpg') }}" alt="Monster Energy Wrapped Motorcycle" />
+                    </div>
 
-          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-          <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        </div>
-        <br />
-        <div style="text-align:center;">
-          <span class="dot" onclick="currentSlide(1)"></span>
-          <span class="dot" onclick="currentSlide(2)"></span>
-          <span class="dot" onclick="currentSlide(3)"></span>
-          <span class="dot" onclick="currentSlide(4)"></span>
-        </div>
-        <p class="text-center text-gray-500 text-sm mt-6"><em>(Images are illustrative. Actual designs may vary.)</em></p>
-      </section>
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+                <br />
+                <div style="text-align:center;">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                </div>
+                <p class="text-center text-gray-500 text-sm mt-6"><em>(Images are illustrative. Actual designs may vary.)</em></p>
+            </section>
 
-      <section class="mb-10">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Important Notice:</h2>
-        <p class="text-gray-700 leading-relaxed bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-md">
-          <strong>Essential Info</strong> please complete the application form below. Our team will respond once we receive your application within 2-3 business days via your preferred contact method (text, email, or WhatsApp).
-        </p>
-      </section>
+            <section class="mb-10">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Important Notice:</h2>
+                <p class="text-gray-700 leading-relaxed bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-md">
+                    <strong>Essential Info</strong> please complete the application form below. Our team will respond once we receive your application within 2-3 business days via your preferred contact method (text, email, or WhatsApp).
+                </p>
+            </section>
 
-      <!-- Application Form with reCAPTCHA -->
-      <section class="bg-gray-50 p-6 sm:p-8 rounded-lg shadow-inner">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6">Application Form</h2>
-        <form
-          id="applicationForm"
-          class="space-y-4"
-          method="POST"
-          action="/submit"
-          onsubmit="return validateRecaptcha();"
-        >
-          <div>
-            <label for="fullName" class="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
-            <input
-              type="text"
-              id="fullName"
-              name="name"
-              required
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-            />
-          </div>
-          <div>
-            <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-            />
-          </div>
-          <div>
-            <label for="phone" class="block text-gray-700 text-sm font-medium mb-1">Phone Number</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              required
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-            />
-          </div>
-          <div>
-            <label class="block text-gray-700 text-sm font-medium mb-1">Preferred Contact Method</label>
-            <div class="flex flex-wrap items-center space-x-4">
-              <label class="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="contact_method"
-                  value="email"
-                  required
-                  class="form-radio h-4 w-4 text-green-600"
-                />
-                <span class="ml-2 text-gray-700">Email</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="contact_method"
-                  value="phone"
-                  class="form-radio h-4 w-4 text-green-600"
-                />
-                <span class="ml-2 text-gray-700">Phone</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="contact_method"
-                  value="whatsapp"
-                  class="form-radio h-4 w-4 text-green-600"
-                />
-                <span class="ml-2 text-gray-700">WhatsApp</span>
-              </label>
+            <!-- Application Form with reCAPTCHA -->
+            <section class="bg-gray-50 p-6 sm:p-8 rounded-lg shadow-inner">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6">Application Form</h2>
+                <form
+                    id="applicationForm"
+                    class="space-y-4"
+                    method="POST"
+                    action="/submit"
+                    onsubmit="return validateRecaptcha();"
+                >
+                    <div>
+                        <label for="fullName" class="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="name"
+                            required
+                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                        />
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                        />
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-gray-700 text-sm font-medium mb-1">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            required
+                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Preferred Contact Method</label>
+                        <div class="flex flex-wrap items-center space-x-4">
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    name="contact_method"
+                                    value="email"
+                                    required
+                                    class="form-radio h-4 w-4 text-green-600"
+                                />
+                                <span class="ml-2 text-gray-700">Email</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    name="contact_method"
+                                    value="phone"
+                                    class="form-radio h-4 w-4 text-green-600"
+                                />
+                                <span class="ml-2 text-gray-700">Phone</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    name="contact_method"
+                                    value="whatsapp"
+                                    class="form-radio h-4 w-4 text-green-600"
+                                />
+                                <span class="ml-2 text-gray-700">WhatsApp</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- New fields added for address and age -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="address" class="block text-gray-700 text-sm font-medium mb-1">Street Address</label>
+                            <input
+                                type="text"
+                                id="address"
+                                name="address"
+                                required
+                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                            />
+                        </div>
+                        <div>
+                            <label for="city" class="block text-gray-700 text-sm font-medium mb-1">City</label>
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                required
+                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                            />
+                        </div>
+                        <div>
+                            <label for="state" class="block text-gray-700 text-sm font-medium mb-1">State</label>
+                            <input
+                                type="text"
+                                id="state"
+                                name="state"
+                                required
+                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                            />
+                        </div>
+                        <div>
+                            <label for="zip" class="block text-gray-700 text-sm font-medium mb-1">Zip Code</label>
+                            <input
+                                type="text"
+                                id="zip"
+                                name="zip"
+                                required
+                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Are you 18 years or older?</label>
+                        <div class="flex flex-wrap items-center space-x-4">
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    name="age"
+                                    value="yes"
+                                    required
+                                    class="form-radio h-4 w-4 text-green-600"
+                                />
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    name="age"
+                                    value="no"
+                                    class="form-radio h-4 w-4 text-green-600"
+                                />
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                    
+                    <div id="recaptcha-message" class="hidden p-3 rounded-md mt-4 text-sm text-center"></div>
+
+                    <button
+                        type="submit"
+                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-md mt-4 transition-colors"
+                    >
+                        Submit Application
+                    </button>
+                </form>
+            </section>
+        </main>
+
+        <!-- New and Concise Footer -->
+        <footer class="bg-gray-900 text-gray-300 py-6">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 text-center md:text-left">
+                <!-- Logo, Social Media, and Copyright -->
+                <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ url_for('static', filename='image/monster_logo.png') }}" alt="Monster Logo" class="h-10">
+                        <p class="text-sm">© 2025 Monster Energy Drink® Advertising Campaign. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-4 text-xl">
+                        <a href="#" class="hover:text-green-500 transition-colors duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="hover:text-green-500 transition-colors duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="hover:text-green-500 transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="hover:text-green-500 transition-colors duration-300">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-          </div>
+        </footer>
+    </div>
 
-          <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
-          
-          <div id="recaptcha-message" class="hidden p-3 rounded-md mt-4 text-sm text-center"></div>
+    <script>
+        // --- Efficient DOM Access ---
+        const slideshowContainer = document.querySelector('.slideshow-container');
+        const slides = document.getElementsByClassName("mySlides");
+        const dots = document.getElementsByClassName("dot");
+        let slideIndex = 1;
+        let startX = 0;
+        let slideInterval;
 
-          <button
-            type="submit"
-            class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-md mt-4 transition-colors"
-          >
-            Submit Application
-          </button>
-        </form>
-      </section>
-    </main>
+        // --- Core Slideshow Logic ---
+        function showSlides(n) {
+            if (n > slides.length) { slideIndex = 1; }
+            if (n < 1) { slideIndex = slides.length; }
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].classList.remove('fade');
+            }
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active-dot", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            slides[slideIndex - 1].classList.add('fade');
+            dots[slideIndex - 1].className += " active-dot";
+        }
 
-    <footer class="footer-ex1 mt-10">
-      <div class="container">
-        <div class="footer-logo-area">
-          <img src="{{ url_for('static', filename='Image/logo.png') }}" alt="Monster Energy Logo" class="footer-logo" />
-          <p class="footer-copyright-text">&copy; 2025 Monster Energy Drink®. All rights reserved.</p>
-        </div>
-        <div class="footer-content-cols">
-          <div class="col">
-            <h3>Contact Us</h3>
-            <address>
-              123 Monster Energy Drive<br />
-              Los Angeles, CA 90001<br />
-              USA<br />
-              Phone: (123) 456-7890<br />
-              Email: info@monsterenergy.com
-            </address>
-          </div>
-          <div class="col">
-            <h3>Social Media</h3>
-            <p><a href="#">Facebook</a></p>
-            <p><a href="#">Instagram</a></p>
-            <p><a href="#">Twitter</a></p>
-            <p><a href="#">YouTube</a></p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
+        // --- User Interaction Functions ---
+        function plusSlides(n) {
+            clearInterval(slideInterval); // Stop automatic slide when user clicks
+            showSlides(slideIndex += n);
+            startAutomaticSlideshow(); // Restart automatic slide after user interaction
+        }
 
-  <script>
-    let slideIndex = 1;
-    showSlides(slideIndex);
+        function currentSlide(n) {
+            clearInterval(slideInterval);
+            showSlides(slideIndex = n);
+            startAutomaticSlideshow();
+        }
 
-    function plusSlides(n) {
-      showSlides(slideIndex += n);
-    }
+        // --- Automatic Slideshow Timer ---
+        function startAutomaticSlideshow() {
+            slideInterval = setInterval(() => {
+                showSlides(slideIndex += 1);
+            }, 4000); // Change image every 4 seconds
+        }
 
-    function currentSlide(n) {
-      showSlides(slideIndex = n);
-    }
+        // --- Mobile Swipe Support ---
+        slideshowContainer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
 
-    function showSlides(n) {
-      let i;
-      const slides = document.getElementsByClassName("mySlides");
-      const dots = document.getElementsByClassName("dot");
-      if (n > slides.length) { slideIndex = 1; }
-      if (n < 1) { slideIndex = slides.length; }
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active-dot", "");
-      }
-      slides[slideIndex-1].style.display = "block";
-      dots[slideIndex-1].className += " active-dot";
-    }
+        slideshowContainer.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
 
-    function validateRecaptcha() {
-      const response = grecaptcha.getResponse();
-      const messageDiv = document.getElementById("recaptcha-message");
-      if (response.length === 0) {
-        messageDiv.textContent = "Please complete the reCAPTCHA to submit the form.";
-        messageDiv.className = "p-3 rounded-md mt-4 text-sm text-center bg-red-100 text-red-700";
-        return false;
-      }
-      messageDiv.textContent = "";
-      messageDiv.className = "hidden";
-      return true;
-    }
-  </script>
+            if (diff > 50) { // Swiped left
+                plusSlides(1);
+            } else if (diff < -50) { // Swiped right
+                plusSlides(-1);
+            }
+        });
+
+        // --- reCAPTCHA Validation ---
+        function validateRecaptcha() {
+            const response = grecaptcha.getResponse();
+            const messageDiv = document.getElementById("recaptcha-message");
+            if (response.length === 0) {
+                messageDiv.textContent = "Please complete the reCAPTCHA to submit the form.";
+                messageDiv.className = "p-3 rounded-md mt-4 text-sm text-center bg-red-100 text-red-700";
+                return false;
+            }
+            messageDiv.textContent = "";
+            messageDiv.className = "hidden";
+            return true;
+        }
+
+        // --- Initial Call to Start Slideshow on Page Load ---
+        document.addEventListener("DOMContentLoaded", () => {
+            showSlides(slideIndex);
+            startAutomaticSlideshow();
+        });
+    </script>
 </body>
 </html>
