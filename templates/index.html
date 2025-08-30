@@ -366,7 +366,9 @@
             </div>
           </div>
 
-          <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+          <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+          
+          <div id="recaptcha-message" class="hidden p-3 rounded-md mt-4 text-sm text-center"></div>
 
           <button
             type="submit"
@@ -437,10 +439,14 @@
 
     function validateRecaptcha() {
       const response = grecaptcha.getResponse();
+      const messageDiv = document.getElementById("recaptcha-message");
       if (response.length === 0) {
-        alert("Please complete the reCAPTCHA to submit the form.");
+        messageDiv.textContent = "Please complete the reCAPTCHA to submit the form.";
+        messageDiv.className = "p-3 rounded-md mt-4 text-sm text-center bg-red-100 text-red-700";
         return false;
       }
+      messageDiv.textContent = "";
+      messageDiv.className = "hidden";
       return true;
     }
   </script>
