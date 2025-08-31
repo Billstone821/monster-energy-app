@@ -332,6 +332,15 @@
                     >
                         Submit Application
                     </button>
+
+                    <!-- Disclaimer added here -->
+                    <p class="mt-4 text-xs text-center text-gray-500">
+                        <span class="font-bold">Disclaimer:</span> By clicking "Submit Application", you agree to our <a href="#" class="text-green-600 hover:underline">Terms of Service</a> and <a href="#" class="text-green-600 hover:underline">Privacy Policy</a>. 
+						
+						
+						
+						Brand-Affiliated Transparency This promotion is part of a Monster Energy advertising campaign. We will never ask for payment. Qualified applicants will be contacted.
+                    </p>
                 </form>
             </section>
         </main>
@@ -343,7 +352,7 @@
                 <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
                     <div class="flex items-center space-x-4">
                         <!-- Temporary logo from a public URL -->
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Monster_Energy_logo.png" alt="Monster Logo" class="h-10">
+                        <img src="{{ url_for('static', filename='Image/monster_logo.png') }}" alt="Monster Logo" class="h-10">
                         <p class="text-sm">© 2025 Monster Energy Drink® Advertising Campaign. All rights reserved.</p>
                     </div>
                     <div class="flex space-x-4 text-xl">
