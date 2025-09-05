@@ -209,12 +209,6 @@ def submit_application():
         flash('Your application could not be submitted due to a server error. Please try again.', 'error')
         return redirect(url_for('index'))
 
-# This is the new, separate route for the sitemap.xml file.
-# It must be placed outside of any other function.
-@app.route('/sitemap.xml')
-def serve_sitemap():
-    return send_from_directory('static', 'sitemap.xml')
-
 if __name__ == '__main__':
     with app.app_context():
         # DO NOT uncomment these lines unless you want to reset your database entirely.
