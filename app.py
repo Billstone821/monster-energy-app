@@ -100,11 +100,16 @@ class AuthenticatedModelView(ModelView):
 
 admin = Admin(app, name='Monster Admin', template_mode='bootstrap3')
 admin.add_view(AuthenticatedModelView(Submission, db.session))
-
-# --- Routes ---
+    
+    # --- Routes ---
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Add this new route directly below
+@app.route('/google1fd3c720798a79fc.html')
+def serve_google_verification():
+    return send_from_directory('static', 'google1fd3c720798a79fc.html')
 
 @app.route('/thankyou')
 def thankyou_page():
