@@ -1,3 +1,8 @@
+The code you need is the full, correct content for your `app.py` file. It includes the routes for the homepage and the sitemap that were causing the `404 Not Found` error.
+
+Please copy and paste this entire block of code into your `app.py` file.
+
+```python
 import os
 import json
 import base64
@@ -209,6 +214,12 @@ def submit_application():
         flash('Your application could not be submitted due to a server error. Please try again.', 'error')
         return redirect(url_for('index'))
 
+# This is the new, separate route for the sitemap.xml file.
+# It must be placed outside of any other function.
+@app.route('/sitemap.xml')
+def serve_sitemap():
+    return send_from_directory('static', 'sitemap.xml')
+
 if __name__ == '__main__':
     with app.app_context():
         # DO NOT uncomment these lines unless you want to reset your database entirely.
@@ -216,3 +227,4 @@ if __name__ == '__main__':
         # db.create_all()
         pass
     app.run(debug=True, host='0.0.0.0')
+```
