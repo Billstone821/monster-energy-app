@@ -3,6 +3,7 @@ import json
 import base64
 import requests
 import resend  # Swapped from sendgrid
+from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, flash, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -130,17 +131,23 @@ def submit_application():
         # Send Email via RESEND
         try:
             resend.Emails.send({
-                "from": FROM_EMAIL, # Must be your verified domain
+                "from": FROM_EMAIL,
                 "to": NOTIFY_EMAIL,
-                "subject": "New Monster Energy Campaign Application",
+                "subject": f"New Application: {full_name}",
                 "reply_to": email,
                 "html": f"""
-                <h3>New Application!</h3>
-                <p><b>Name:</b> {full_name}</p>
-                <p><b>Email:</b> {email}</p>
-                <p><b>Address:</b> {address}, {city}, {state}, {zip_code}</p>
+                    <h3>New Application Details</h3>
+                    <hr>
+                    <p><b>Name:</b> {full_name}</p>
+                    <p><b>Email:</b> {email}</p>
+                    <p><b>Phone:</b> {phone}</p>
+                    <p><b>Contact Method:</b> {contact_method}</p>
+                    <p><b>Address:</b> {address}, {city}, {state}, {zip_code}</p>
+                    <p><b>Age 18+:</b> {age_check}</p>
+                    <hr>
+                    <p><i>Submitted on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</i></p>
                 """
-            })
+            }) # This closes the resend.Emails.send function
             print("[INFO] Resend email sent successfully.")
         except Exception as e:
             print(f"[ERROR] Resend failed: {e}")
@@ -153,7 +160,7 @@ def submit_application():
         flash('Server error.', 'error')
         return redirect(url_for('index'))
 
-# --- MOVE THESE TO THE BOTTOM, ALIGNED TO THE LEFT ---
+# --- DATABASE AND RUN COMMANDS (KEEP AT THE BOTTOM) ---
 with app.app_context():
     try:
         db.create_all()
@@ -163,5 +170,3 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-    
