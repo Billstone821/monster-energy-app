@@ -2,7 +2,7 @@ import os
 import json
 import base64
 import requests
-import resend  # Swapped from sendgrid
+import resend
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, flash, Response
 from flask_sqlalchemy import SQLAlchemy
@@ -17,23 +17,16 @@ load_dotenv()
 # --- Configuration from Render/Env ---
 SECRET_KEY = os.getenv("SECRET_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
-RESEND_API_KEY = os.getenv("RESEND_API_KEY") # Updated name
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL")
 FROM_EMAIL = os.getenv("FROM_EMAIL")
-REPLY_TO_EMAIL = os.getenv("REPLY_TO")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 
 # --- Environment Variable Checks ---
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY is missing.")
-if not DATABASE_URL:
-    raise ValueError("DATABASE_URL is missing.")
-if not RESEND_API_KEY:
-    raise ValueError("RESEND_API_KEY is missing. Please set it in Render settings.")
-if not ADMIN_USERNAME or not ADMIN_PASSWORD:
-    raise ValueError("Admin credentials missing.")
+if not SECRET_KEY or not DATABASE_URL or not RESEND_API_KEY:
+    raise ValueError("Crucial Environment Variables (SECRET_KEY, DATABASE_URL, or RESEND_API_KEY) are missing.")
 
 # Initialize Resend
 resend.api_key = RESEND_API_KEY
@@ -97,6 +90,7 @@ def serve_sitemap():
 @app.route('/submit', methods=['POST'])
 def submit_application():
     try:
+        # 1. Capture data from form
         full_name = request.form.get('name')
         email = request.form.get('email')
         phone = request.form.get('phone')
@@ -105,10 +99,10 @@ def submit_application():
         city = request.form.get('city')
         state = request.form.get('state')
         zip_code = request.form.get('zip')
-        age_18_plus = request.form.get('age') == 'yes'
+        age_check = request.form.get('age') 
         recaptcha_response = request.form.get('g-recaptcha-response')
 
-        # reCAPTCHA Verification
+        # 2. reCAPTCHA Verification
         recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
         recaptcha_req = requests.post(recaptcha_verify_url, data={
             'secret': RECAPTCHA_SECRET_KEY,
@@ -119,16 +113,23 @@ def submit_application():
             flash('reCAPTCHA failed.', 'error')
             return redirect(url_for('index'))
 
-        # Save to Database
+        # 3. Save to Database
+        # Note: We convert age_check to a Boolean (True/False) for the database
         new_submission = Submission(
-            full_name=full_name, email=email, phone=phone,
-            contact_method=contact_method, address=address,
-            city=city, state=state, zip_code=zip_code, age_18_plus=age_18_plus
+            full_name=full_name, 
+            email=email, 
+            phone=phone,
+            contact_method=contact_method, 
+            address=address,
+            city=city, 
+            state=state, 
+            zip_code=zip_code, 
+            age_18_plus=(age_check == 'yes')
         )
         db.session.add(new_submission)
         db.session.commit()
 
-        # Send Email via RESEND
+        # 4. Send Email via RESEND
         try:
             resend.Emails.send({
                 "from": FROM_EMAIL,
@@ -147,20 +148,20 @@ def submit_application():
                     <hr>
                     <p><i>Submitted on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</i></p>
                 """
-            }) # This closes the resend.Emails.send function
-            print("[INFO] Resend email sent successfully.")
-        except Exception as e:
-            print(f"[ERROR] Resend failed: {e}")
+            })
+            print(f"[INFO] Resend email sent successfully for {full_name}.")
+        except Exception as email_err:
+            print(f"[ERROR] Email failed but database saved: {email_err}")
 
         return redirect(url_for('thankyou_page'))
 
     except Exception as e:
         db.session.rollback()
-        print(f"[CRITICAL] {e}")
-        flash('Server error.', 'error')
+        print(f"[CRITICAL ERROR]: {e}")
+        flash('An error occurred. Please try again.', 'error')
         return redirect(url_for('index'))
 
-# --- DATABASE AND RUN COMMANDS (KEEP AT THE BOTTOM) ---
+# --- Database Creation & App Run ---
 with app.app_context():
     try:
         db.create_all()
