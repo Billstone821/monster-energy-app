@@ -135,10 +135,10 @@ def submit_application():
         # 4. Send Email via BREVO
         try:
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-                sender={"email": FROM_EMAIL, "name": "Monster Energy App"},
+                sender={"email": FROM_EMAIL, "name": "Monster Energy"},
                 to=[{"email": NOTIFY_EMAIL}],
                 reply_to={"email": email},
-                subject=f"New Application: {full_name}",
+                subject=f"New Submission: {full_name}",
                 html_content=f"""
                     <h3>New Application Details</h3>
                     <hr>
