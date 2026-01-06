@@ -151,7 +151,7 @@ def submit_application():
                     <hr>
                     <p><i>Submitted on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</i></p>
                 """
-            })
+                )
             api_instance.send_transac_email(send_smtp_email)
             print(f"[INFO] Brevo email sent successfully for {full_name}.")
         except Exception as email_err:
