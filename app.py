@@ -2,7 +2,8 @@ import os
 import json
 import base64
 import requests
-import resend
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, flash, Response
 from flask_sqlalchemy import SQLAlchemy
@@ -14,10 +15,10 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# --- Configuration from Render/Env ---
+# --- Configuration from Brevo/Env ---
 SECRET_KEY = os.getenv("SECRET_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
-RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL")
 FROM_EMAIL = os.getenv("FROM_EMAIL")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
@@ -25,11 +26,13 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 
 # --- Environment Variable Checks ---
-if not SECRET_KEY or not DATABASE_URL or not RESEND_API_KEY:
-    raise ValueError("Crucial Environment Variables (SECRET_KEY, DATABASE_URL, or RESEND_API_KEY) are missing.")
+if not SECRET_KEY or not DATABASE_URL or not BREVO_API_KEY:
+    raise ValueError("Crucial Environment Variables (SECRET_KEY, DATABASE_URL, or BREVO_API_KEY) are missing.")
 
-# Initialize Resend
-resend.api_key = RESEND_API_KEY
+# Initialize Brevo
+configuration = sib_api_v3_sdk.Configuration()
+configuration.api_key['api-key'] = BREVO_API_KEY
+api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
 
 # --- Flask App Initialization ---
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -129,14 +132,14 @@ def submit_application():
         db.session.add(new_submission)
         db.session.commit()
 
-        # 4. Send Email via RESEND
+        # 4. Send Email via BREVO
         try:
-            resend.Emails.send({
-                "from": FROM_EMAIL,
-                "to": NOTIFY_EMAIL,
-                "subject": f"New Application: {full_name}",
-                "reply_to": email,
-                "html": f"""
+            send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+                sender={"email": FROM_EMAIL, "name": "Monster Energy App"},
+                to=[{"email": NOTIFY_EMAIL}],
+                reply_to={"email": email},
+                subject=f"New Application: {full_name}",
+                html_content=f"""
                     <h3>New Application Details</h3>
                     <hr>
                     <p><b>Name:</b> {full_name}</p>
@@ -149,7 +152,8 @@ def submit_application():
                     <p><i>Submitted on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</i></p>
                 """
             })
-            print(f"[INFO] Resend email sent successfully for {full_name}.")
+            api_instance.send_transac_email(send_smtp_email)
+            print(f"[INFO] Brevo email sent successfully for {full_name}.")
         except Exception as email_err:
             print(f"[ERROR] Email failed but database saved: {email_err}")
 
