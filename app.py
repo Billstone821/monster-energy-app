@@ -43,7 +43,32 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # --- Database Initialization ---
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+# --- PLACE 1: THE EMAIL MACHINE ---
+def send_monster_email(email, full_name):
+    html_content = f"""
+    <div style="background-color: #000; color: #fff; padding: 30px; font-family: sans-serif; border: 4px solid #66cc00; text-align: center;">
+        <h1 style="color: #66cc00;">UNLEASH THE BEAST</h1>
+        <p style="font-size: 18px;">Yo {full_name}!</p>
+        <p>Your application for the <strong>Monster Energy Campaign</strong> has been received.</p>
+        <p>Our team is reviewing your profile. Stay tuned.</p>
+        <br>
+        <hr style="border: 1px solid #66cc00;">
+        <p style="font-size: 10px; color: #888;">&copy; 2026 Monster Energy Campaign</p>
+    </div>
+    """
 
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+        to=[{"email": email, "name": full_name}],
+        sender={"email": "noreply@monstercampaigns.info", "name": "Monster Energy"}, 
+        subject="Application Confirmed - Monster Energy",
+        html_content=html_content
+    )
+
+    try:
+        api_instance.send_transac_email(send_smtp_email)
+        print(f"SUCCESS: Auto-reply sent to {email}")
+    except Exception as e:
+        print(f"FAILURE: Brevo error: {e}")
 # --- Database Model ---
 class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -119,8 +144,7 @@ def submit_application():
             'remoteip': request.remote_addr
         })
         if not recaptcha_req.json().get('success'):
-            flash('reCAPTCHA failed.', 'error')
-            return redirect(url_for('index'))
+            return "reCAPTCHA failed. Please go back and try again.", 400
 
         # 3. Save to Database
         # Note: We convert age_check to a Boolean (True/False) for the database
@@ -138,6 +162,16 @@ def submit_application():
         db.session.add(new_submission)
         db.session.commit()
 
+        # 4. THE TRIGGER
+        # It picks the 'email' and 'full_name' from Step 1
+        send_monster_email(email, full_name)
+
+        return render_template('thank_you.html')
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Internal Server Error", 500
+        
         # 4. Send Email via BREVO
         try:
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
