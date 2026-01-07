@@ -69,6 +69,28 @@ def send_monster_email(email, full_name):
         print(f"SUCCESS: Auto-reply sent to {email}")
     except Exception as e:
         print(f"FAILURE: Brevo error: {e}")
+        
+        # 2. Telegram Alert Machine
+def send_telegram_alert(message):
+    token = os.environ.get('TELEGRAM_BOT_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    if not token or not chat_id:
+        print("TELEGRAM ERROR: Keys not found in environment variables.")
+        return
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {
+        "chat_id": chat_id, 
+        "text": message, 
+        "parse_mode": "HTML"
+    }
+    try:
+        requests.post(url, data=payload, timeout=10)
+        print("SUCCESS: Telegram alert sent.")
+    except Exception as e:
+        print(f"ERROR: Telegram failed: {e}")
+        
+        
 # --- Database Model ---
 class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -166,44 +188,28 @@ def submit_application():
         # It picks the 'email' and 'full_name' from Step 1
         send_monster_email(email, full_name)
 
+        # Send alert to YOUR Telegram (Place this here!)
+        alert_text = (
+            f"<b>🔥 NEW APPLICATION MONSTER!</b>\n\n"
+            f"---------------------------\n"
+            f"<b>👤 Name:</b> {full_name}\n"
+            f"<b>📧 Email:</b> {email}\n"
+            f"<b>📞 Phone:</b> {phone}\n"
+            f"<b>💬 Preferred Contact:</b> {contact_method}\n"
+            f"<b>🏠 Address:</b>\n"
+            f"{address}\n"
+            f"{city}, {state} {zip_code}\n"
+            f"<b>🔞 18+ Verified:</b> {age_check}\n"
+            f"---------------------------\n"
+            f"<i>Check the Admin Panel for full history.</i>"
+        )
+        send_telegram_alert(alert_text)
         return render_template('thank_you.html')
 
     except Exception as e:
-        print(f"Error: {e}")
-        return "Internal Server Error", 500
-        
-        # 4. Send Email via BREVO
-        try:
-            send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-                sender={"email": FROM_EMAIL, "name": "Monster Energy"},
-                to=[{"email": NOTIFY_EMAIL}],
-                reply_to={"email": email},
-                subject=f"New Submission: {full_name}",
-                html_content=f"""
-                    <h3>New Application Details</h3>
-                    <hr>
-                    <p><b>Name:</b> {full_name}</p>
-                    <p><b>Email:</b> {email}</p>
-                    <p><b>Phone:</b> {phone}</p>
-                    <p><b>Contact Method:</b> {contact_method}</p>
-                    <p><b>Address:</b> {address}, {city}, {state}, {zip_code}</p>
-                    <p><b>Age 18+:</b> {age_check}</p>
-                    <hr>
-                    <p><i>Submitted on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</i></p>
-                """
-                )
-            api_instance.send_transac_email(send_smtp_email)
-            print(f"[INFO] Brevo email sent successfully for {full_name}.")
-        except Exception as email_err:
-            print(f"[ERROR] Email failed but database saved: {email_err}")
-
-        return redirect(url_for('thankyou_page'))
-
-    except Exception as e:
         db.session.rollback()
-        print(f"[CRITICAL ERROR]: {e}")
-        flash('An error occurred. Please try again.', 'error')
-        return redirect(url_for('index'))
+        print(f"CRITICAL ERROR: {e}")
+        return "Internal Server Error", 500
 
 # --- Database Creation & App Run ---
 with app.app_context():
