@@ -2,6 +2,8 @@ import os
 import json
 import base64
 import requests
+import random
+import uuid
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 from datetime import datetime
@@ -43,30 +45,46 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # --- Database Initialization ---
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-# --- PLACE 1: THE EMAIL MACHINE ---
-def send_monster_email(email, full_name):
-    html_content = f"""
-    <div style="background-color: #000; color: #fff; padding: 30px; font-family: sans-serif; border: 4px solid #66cc00; text-align: center;">
-        <h1 style="color: #66cc00;">UNLEASH THE BEAST</h1>
-        <p style="font-size: 18px;">Yo {full_name}!</p>
-        <p>Your application for the <strong>Monster Energy Campaign</strong> has been received.</p>
-        <p>Our team is reviewing your profile. Stay tuned.</p>
-        <br>
-        <hr style="border: 1px solid #66cc00;">
-        <p style="font-size: 10px; color: #888;">&copy; 2026 Monster Energy Campaign</p>
-    </div>
-    """
 
+# --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
+def send_monster_email(email, full_name):
+    # 1. This function creates the 'scramble' effect to hide words from bots
+    def scramble(word):
+        if not word: return ""
+        pos = random.randint(1, len(word) - 1)
+        # Injects an invisible character: Humans see 'Monster', Bots see 'Mon&#8203;ster'
+        return f"{word[:pos]}&#8203;{word[pos:]}"
+
+    # 2. Prepare the randomized data for the template
+    random_data = {
+        "name": full_name,
+        "beast": scramble("BEAST"),
+        "brand": scramble("Monster"),
+        "campaign": scramble("Campaign"),
+        "color": random.choice(["#66cc00", "#67cd00", "#65cb00", "#64ca00"]), # Slight color shifts
+        "padding": random.randint(25, 35), # Slight layout shifts
+        "uid": uuid.uuid4().hex[:6] # Unique ID to change the "File Hash"
+    }
+
+    # 3. Pulls from your new templates/email_template.html file
+    try:
+        html_content = render_template('email_template.html', **random_data)
+    except Exception as e:
+        print(f"CRITICAL ERROR: email_template.html not found! {e}")
+        return
+
+    # 4. Set up the Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
         sender={"email": "noreply@monstercampaigns.info", "name": "Monster Energy"}, 
-        subject="Application Confirmed - Monster Energy",
+        # Scramble the subject too so Google doesn't see "Bulk" patterns
+        subject=f"Application Confirmed - {random_data['brand']} Energy",
         html_content=html_content
     )
 
     try:
         api_instance.send_transac_email(send_smtp_email)
-        print(f"SUCCESS: Auto-reply sent to {email}")
+        print(f"SUCCESS: Polymorphic bypass email sent to {email}")
     except Exception as e:
         print(f"FAILURE: Brevo error: {e}")
         
@@ -74,6 +92,8 @@ def send_monster_email(email, full_name):
 def send_telegram_alert(message):
     token = os.environ.get('TELEGRAM_BOT_TOKEN')
     chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+
+    # Guard clause: Stop if keys are missing
     if not token or not chat_id:
         print("TELEGRAM ERROR: Keys not found in environment variables.")
         return
@@ -84,9 +104,13 @@ def send_telegram_alert(message):
         "text": message, 
         "parse_mode": "HTML"
     }
+
     try:
-        requests.post(url, data=payload, timeout=10)
-        print("SUCCESS: Telegram alert sent.")
+        response = requests.post(url, data=payload, timeout=10)
+        if response.status_code == 200:
+            print("SUCCESS: Telegram alert sent.")
+        else:
+            print(f"TELEGRAM API ERROR: {response.text}")
     except Exception as e:
         print(f"ERROR: Telegram failed: {e}")
         
