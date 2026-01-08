@@ -42,6 +42,12 @@ app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# This line fixes the "decryption failed or bad record mac" error
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 280,
+}
+
 # --- Database Initialization ---
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
