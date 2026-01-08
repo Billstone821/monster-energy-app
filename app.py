@@ -51,9 +51,14 @@ def send_monster_email(email, full_name):
     # 1. This function creates the 'scramble' effect to hide words from bots
     def scramble(word):
         if not word: return ""
+        # Don't scramble very short words to avoid errors
+        if len(word) < 2: return word 
+        
         pos = random.randint(1, len(word) - 1)
-        # Injects an invisible character: Humans see 'Monster', Bots see 'Mon&#8203;ster'
-        return f"{word[:pos]}&#8203;{word[pos:]}"
+        
+        # PRO-TIP: Use the raw unicode escape sequence \u200b
+        # This is more "stealthy" and looks cleaner in modern inboxes
+        return f"{word[:pos]}\u200b{word[pos:]}"
 
     # 2. Prepare the randomized data for the template
     random_data = {
