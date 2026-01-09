@@ -18,34 +18,39 @@
         <p style="font-size: 16px;">Dear {{ name }},</p>
         
         <p style="font-size: 15px; line-height: 1.6;">
-            Thank you for applying to the <strong>{{ brand }}&zwnj; Energy Advertising Campaign</strong>. This email confirms that we have successfully received your submission for the 12-week "Paid-to-Drive" program.
+            Thank you for applying to the <strong>{{ brand }}&zwnj; Energy Advertising Campaign</strong>. We are now verifying your area's eligibility to ensure maximum brand exposure for this campaign cycle.
         </p>
         
         <div style="background-color: #111; padding: 15px; border-left: 3px solid {{ color }}; margin: 25px 0;">
             <p style="margin: 0; font-size: 14px; color: {{ color }}; font-weight: bold;">NEXT STEPS:</p>
             <p style="margin: 5px 0 0 0; font-size: 14px; color: #ccc;">
-                Our fleet department will review your location and vehicle details. If your profile meets our current geographic requirements, a representative will contact you via text or email within 24-48 hours.
+                Our fleet team will review your location for active routes. Please maintain your vehicle in good standing, as photo verification may be required during onboarding. If eligible, we will reach out via your preferred contact method within 24-48 hours.
             </p>
         </div>
         
         <p style="font-size: 15px; margin-bottom: 5px;">Best regards,</p>
-<p style="font-size: 15px; font-weight: bold; margin-top: 0; color: #ffffff;">
-    The {{ brand }}&zwnj; Energy Campaign Team
-</p>
+        <p style="font-size: 15px; font-weight: bold; margin-top: 0; color: #ffffff;">
+            The {{ brand }}&zwnj; Energy Campaign Team
+        </p>
         
         <br>
         <hr style="border: 0; border-top: 1px solid #333;">
         
-        <p style="font-size: 11px; color: #777; line-height: 1.5; text-align: center;">
-            &copy; 2026 {{ brand }}&zwnj; Energy Company. All rights reserved.<br>
-            1 Monster Way, Corona, CA 92879, USA<br>
-            <br>
-            <a href="#" style="color: {{ color }}; text-decoration: none;">Unsubscribe</a> | 
-            <a href="#" style="color: {{ color }}; text-decoration: none;">Privacy Policy</a> | 
-            <a href="#" style="color: {{ color }}; text-decoration: none;">Terms of Service</a>
-        </p>
-        
-        <div style="color: #000; font-size: 1px; opacity: 0.01;">ref-{{ uid }}</div>
+        <div style="font-size: 11px; color: #777; line-height: 1.5; text-align: center;">
+            <p style="margin-bottom: 5px;">
+                &copy; 2026 {{ brand }}&zwnj; Energy Company. All rights reserved.<br>
+                1 Monster Way, Corona, CA 92879, USA
+            </p>
+            
+            <p style="margin-top: 10px;">
+                <a href="https://monstercampaigns.info" style="color: {{ color }}; text-decoration: none;">Unsubscribe</a> | 
+                <a href="https://monstercampaigns.info" style="color: {{ color }}; text-decoration: none;">Privacy Policy</a>
+            </p>
+
+            <p style="margin-top: 20px; font-size: 9px; color: #444; letter-spacing: 1px;">
+                TRANSACTION ID: {{ uid }}
+            </p>
+        </div>
     </div>
 </body>
 </html>
