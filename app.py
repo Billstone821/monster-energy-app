@@ -85,13 +85,14 @@ def send_monster_email(email, full_name):
         return
 
     # 4. Set up the Brevo Send
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-        to=[{"email": email, "name": full_name}],
-        sender={"email": "noreply@monstercampaigns.info", "name": "Monster Energy Recruitment"}, 
-        # Clean subject line for high trust
-        subject="Monster Energy® | Application Received & Confirmed",
-        html_content=html_content
-    )
+short_id = uid[:8]
+send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+    to=[{"email": email, "name": full_name}],
+    sender={"email": "noreply@monstercampaigns.info", "name": "Campaign Support"}, 
+    # Removed ® and added Unique ID to beat spam filters
+    subject=f"Application ID #{short_id} - Campaign Confirmation",
+    html_content=html_content
+)
 
     try:
         api_instance.send_transac_email(send_smtp_email)
