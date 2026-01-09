@@ -54,16 +54,11 @@ migrate = Migrate(app, db)
 
 # --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
 def send_monster_email(email, full_name):
-    # 1. This function creates the 'scramble' effect to hide words from bots
+    # 1. Scramble function for bot protection
     def scramble(word):
         if not word: return ""
-        # Don't scramble very short words to avoid errors
         if len(word) < 2: return word 
-        
         pos = random.randint(1, len(word) - 1)
-        
-        # PRO-TIP: Use the raw unicode escape sequence \u200b
-        # This is more "stealthy" and looks cleaner in modern inboxes
         return f"{word[:pos]}\u200b{word[pos:]}"
 
     # 2. Prepare the randomized data for the template
@@ -83,9 +78,10 @@ def send_monster_email(email, full_name):
     except Exception as e:
         print(f"CRITICAL ERROR: email_template.html not found! {e}")
         return
-
+        
+    short_id = uuid.uuid4().hex[:8]
     # 4. Set up the Brevo Send
-    short_id = uid[:8]
+    
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
         sender={"email": "noreply@monstercampaigns.info", "name": "Campaign Support"}, 
@@ -203,6 +199,9 @@ def submit_application():
         })
         if not recaptcha_req.json().get('success'):
             return "reCAPTCHA failed. Please go back and try again.", 400
+            
+        uid = str(uuid.uuid4())
+        short_id = uid[:8]
 
         # 3. Save to Database
         # Note: We convert age_check to a Boolean (True/False) for the database
@@ -220,7 +219,14 @@ def submit_application():
         db.session.add(new_submission)
         db.session.commit()
 
-        # 4. THE TRIGGER
+        # 4. Prepare Email Data
+        template_data = {
+            'name': full_name,
+            'brand': 'Monster',
+            'uid': uid,
+            'color': '#00ff00'
+        }
+        
         # It picks the 'email' and 'full_name' from Step 1
         send_monster_email(email, full_name)
 
