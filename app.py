@@ -87,9 +87,9 @@ def send_monster_email(email, full_name):
     # 4. Set up the Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
-        sender={"email": "noreply@monstercampaigns.info", "name": "Monster Energy"}, 
-        # Scramble the subject too so Google doesn't see "Bulk" patterns
-        subject=f"Application Confirmed - {random_data['brand']} Energy",
+        sender={"email": "noreply@monstercampaigns.info", "name": "Monster Energy Recruitment"}, 
+        # Clean subject line for high trust
+        subject="Monster Energy® | Application Received & Confirmed",
         html_content=html_content
     )
 
