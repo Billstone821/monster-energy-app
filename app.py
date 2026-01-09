@@ -85,18 +85,18 @@ def send_monster_email(email, full_name):
         return
 
     # 4. Set up the Brevo Send
-short_id = uid[:8]
-send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-    to=[{"email": email, "name": full_name}],
-    sender={"email": "noreply@monstercampaigns.info", "name": "Campaign Support"}, 
-    # Removed ® and added Unique ID to beat spam filters
-    subject=f"Application ID #{short_id} - Campaign Confirmation",
-    html_content=html_content
-)
+    short_id = uid[:8]
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+        to=[{"email": email, "name": full_name}],
+        sender={"email": "noreply@monstercampaigns.info", "name": "Campaign Support"}, 
+        # Removed ® and added Unique ID to beat spam filters
+        subject=f"Application ID #{short_id} - Campaign Confirmation",
+        html_content=html_content
+    )
 
     try:
         api_instance.send_transac_email(send_smtp_email)
-        print(f"SUCCESS: Polymorphic bypass email sent to {email}")
+        print(f"SUCCESS: Email sent to {email}")
     except Exception as e:
         print(f"FAILURE: Brevo error: {e}")
         
