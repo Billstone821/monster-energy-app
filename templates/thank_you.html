@@ -4,14 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You! - Monster Energy Campaign</title>
-  <!-- Tailwind CSS CDN for styling -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
+  
+  <script src="https://cdn.tailwindcss.com" nonce="{{ csp_nonce() }}"></script>
+  
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
     rel="stylesheet"
+    nonce="{{ csp_nonce() }}"
   />
-  <style>
+
+  <style nonce="{{ csp_nonce() }}">
     body {
       font-family: "Inter", sans-serif;
       background-color: #f3f4f6;
