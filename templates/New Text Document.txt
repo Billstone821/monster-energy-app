@@ -1,0 +1,99 @@
+import os
+import sib_api_v3_sdk
+import time
+import random
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Setup Brevo
+configuration = sib_api_v3_sdk.Configuration()
+configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
+api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+
+def send_with_logging():
+    YOUR_LINK = "https://mylink" 
+    SENDER_EMAIL = "support@yourdomain.com" # Your authenticated domain
+    
+    # Files
+    LEADS_FILE = 'emails.txt'
+    LOG_FILE = 'sent_log.txt'
+
+    # 1. Load already sent emails to avoid duplicates
+    sent_emails = set()
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, 'r') as f:
+            sent_emails = set(line.strip() for line in f)
+
+    # 2. Load leads
+    if not os.path.exists(LEADS_FILE):
+        print("Error: emails.txt not found!")
+        return
+    with open(LEADS_FILE, 'r') as f:
+        all_leads = [line.strip() for line in f if line.strip()]
+
+    # 3. Filter out leads we already emailed
+    leads_to_send = [email for email in all_leads if email not in sent_emails]
+    
+    print(f"📡 Total leads: {len(all_leads)} | Already sent: {len(sent_emails)}")
+    print(f"🔥 Starting blast to {len(leads_to_send)} remaining leads...")
+
+    subjects = [
+        "Status: commute participation details",
+        "Monster Energy: Update regarding your vehicle",
+        "Monster Energy: Materials for your car",
+        "Check out the Monster Energy Program",
+        "Update: Logistics for your vehicle branding",
+        "Regarding your local campaign inquiry",
+        "Monster Energy: Commute branding logistics",
+        "Update: Commute routes for the branding campaign",
+        "Pending: Your commute participation details"
+    ]
+
+    for email in leads_to_send:
+        try:
+            text_message = f"""
+Monster Energy Campaign Limited Spots Available! 
+
+Wrap your car, truck, or van and get paid to show off. 
+Compensation is set weekly pay:350.00
+
+Check it out here: 
+{YOUR_LINK}
+
+--------------------------------------------------
+Monster Energy Company
+1 Monster Way, Corona, CA 92879
+All Rights Reserved.
+
+Unsubscribe: {{{{{{ unsubscribe }}}}}}
+"""
+
+            send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+                to=[{"email": email}],
+                sender={"email": SENDER_EMAIL, "name": "Monster Energy"},
+                subject=random.choice(subjects), 
+                text_content=text_message
+            )
+
+            api_instance.send_transac_email(send_smtp_email)
+            
+            # 4. Log the success immediately
+            with open(LOG_FILE, 'a') as f:
+                f.write(f"{email}\n")
+                
+            print(f"✅ INBOXED & LOGGED: {email}")
+            
+            # Random delay to look human
+            time.sleep(random.uniform(2, 15)) 
+
+        except Exception as e:
+            if "quota" in str(e).lower():
+                print("❌ STOPPING: You reached your Brevo daily limit.")
+                break
+            print(f"❌ FAILED: {email} | {e}")
+
+    print("--- Blast Process Finished ---")
+
+if __name__ == "__main__":
+    send_with_logging()

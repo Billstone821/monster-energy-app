@@ -4,11 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Monster Energy Drink® Advertising Campaign - Drive & Earn!</title>
-    <!-- Tailwind CSS CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
+	<script src="https://cdn.tailwindcss.com" nonce="{{ csp_nonce() }}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer nonce="{{ csp_nonce() }}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         body {
@@ -105,9 +103,6 @@
             to {opacity: 1;}
         }
     </style>
-
-    <!-- Google reCAPTCHA v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
 
@@ -159,8 +154,8 @@
                         <img src="{{ url_for('static', filename='Image/img4.jpg') }}" alt="Monster Energy Wrapped Motorcycle" />
                     </div>
 
-                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    <a class="prev" id="prevBtn">&#10094;</a>
+                    <a <a class="next" id="nextBtn">&#10095;</a>
                 </div>
                 <br />
                 <div style="text-align:center;">
@@ -360,7 +355,7 @@
                         </div>
                         <p class="text-xs text-gray-400 max-w-xs">
                             1 Monster Way, Corona, CA 92879, USA<br>
-                            © <script>document.write(new Date().getFullYear())</script> Monster Energy Company. All rights reserved.
+                            © <script nonce="{{ csp_nonce() }}">document.write(new Date().getFullYear())</script> Monster Energy Company. All rights reserved.
                         </p>
                     </div>
 
@@ -388,7 +383,7 @@
         </footer>
     </div>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         // --- Efficient DOM Access ---
         const slideshowContainer = document.querySelector('.slideshow-container');
         const slides = document.getElementsByClassName("mySlides");
@@ -467,6 +462,19 @@
         document.addEventListener("DOMContentLoaded", () => {
             showSlides(slideIndex);
             startAutomaticSlideshow();
+        });
+		document.getElementById('prevBtn').addEventListener('click', () => {
+            plusSlides(-1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            plusSlides(1);
+        });
+
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide(index + 1);
+            });
         });
     </script>
 </body>

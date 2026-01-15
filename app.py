@@ -13,6 +13,8 @@ from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from dotenv import load_dotenv
+from flask_talisman import Talisman
+from flask_compress import Compress
 
 # Load environment variables
 load_dotenv()
@@ -38,6 +40,33 @@ api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(co
 
 # --- Flask App Initialization ---
 app = Flask(__name__, template_folder='templates', static_folder='static')
+# 1. DEFINE THE SECURITY POLICY
+csp = {
+    'default-src': '\'self\'',
+    'script-src': [
+        '\'self\'',
+        'https://www.google.com/recaptcha/',
+        'https://www.gstatic.com/recaptcha/'
+    ],
+    'frame-src': [
+        '\'self\'',
+        'https://www.google.com/recaptcha/',
+    ],
+    'style-src': [
+        '\'self\'',
+        '\'unsafe-inline\'' # Required for Flask-Admin styles
+    ]
+}
+
+# 2. APPLY THE PROTECTION (XSS Nonce)
+# This generates the secret nonce you'll use in your HTML
+Talisman(app, 
+         content_security_policy=csp, 
+         content_security_policy_nonce_in=['script-src'],
+         force_https=False) 
+
+# 3. APPLY COMPRESSION
+Compress(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
