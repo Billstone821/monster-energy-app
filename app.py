@@ -73,9 +73,9 @@ csp = {
 # 2. APPLY THE PROTECTION (XSS Nonce)
 # This generates the secret nonce you'll use in your HTML
 Talisman(app, 
-         content_security_policy=csp, 
-         content_security_policy_nonce_in=['script-src'],
-         force_https=False) 
+         content_security_policy=None, 
+         force_https=False, 
+         session_cookie_secure=False) 
 
 # 3. APPLY COMPRESSION
 Compress(app)
