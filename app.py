@@ -45,6 +45,7 @@ csp = {
     'default-src': '\'self\'',
     'script-src': [
         '\'self\'',
+        '\'unsafe-inline\'', # Allows your slideshow script to run
         'https://www.google.com/recaptcha/',
         'https://www.gstatic.com/recaptcha/'
     ],
@@ -54,9 +55,16 @@ csp = {
     ],
     'style-src': [
         '\'self\'',
-        '\'unsafe-inline\'' # Required for Flask-Admin styles
+        '\'unsafe-inline\'', 
+        'https://fonts.googleapis.com', # Allows Google Fonts
+        'https://cdnjs.cloudflare.com'  # Allows FontAwesome
     ],
-    'img-src': ['*', 'data:', 'blob:']
+    'font-src': [
+        '\'self\'',
+        'https://fonts.gstatic.com',
+        'https://cdnjs.cloudflare.com'
+    ],
+    'img-src': ["'self'", "data:", "blob:", "*"] # Allows images from anywhere
 }
 
 # 2. APPLY THE PROTECTION (XSS Nonce)
