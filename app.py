@@ -165,7 +165,10 @@ class Submission(db.Model):
     zip_code = db.Column(db.String(20), nullable=False)
     age_18_plus = db.Column(db.Boolean, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
-
+    ip_address = db.Column(db.String(50))
+    user_agent = db.Column(db.String(255))
+    browser_metadata = db.Column(db.Text)  
+    fingerprint_id = db.Column(db.String(100))
 # --- Flask-Admin Setup ---
 class AuthenticatedModelView(ModelView):
 # --- UI & FEATURE SETTINGS ---
@@ -218,13 +221,21 @@ def submit_application():
         zip_code = request.form.get('zip')
         age_check = request.form.get('age') 
         recaptcha_response = request.form.get('g-recaptcha-response')
-
+        ua = request.form.get('user_agent')
+        meta = request.form.get('browser_metadata')
+        fp = request.form.get('fingerprint_id')
+        
+        # Capture the IP Address
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            ip = request.remote_addr
         # 2. reCAPTCHA Verification
         recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify"
         recaptcha_req = requests.post(recaptcha_verify_url, data={
             'secret': RECAPTCHA_SECRET_KEY,
             'response': recaptcha_response,
-            'remoteip': request.remote_addr
+            'remoteip': ip
         })
         if not recaptcha_req.json().get('success'):
             return "reCAPTCHA failed. Please go back and try again.", 400
@@ -243,7 +254,11 @@ def submit_application():
             city=city, 
             state=state, 
             zip_code=zip_code, 
-            age_18_plus=(age_check == 'yes')
+            age_18_plus=(age_check == 'yes'),
+            ip_address=ip,
+            user_agent=ua,
+            browser_metadata=meta,
+            fingerprint_id=fp
         )
         db.session.add(new_submission)
         db.session.commit()
