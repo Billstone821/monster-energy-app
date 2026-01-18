@@ -49,7 +49,8 @@ csp = {
         '\'unsafe-inline\'',
         '\'unsafe-eval\'',        # Allows your slideshow script to run
         'https://www.google.com/recaptcha/',
-        'https://www.gstatic.com/recaptcha/'
+        'https://www.gstatic.com/recaptcha/',
+        'https://cdn.tailwindcss.com'
     ],
     'frame-src': [
         '\'self\'',
