@@ -56,7 +56,7 @@ csp = {
         '\'self\'',
         '\'unsafe-inline\'' # Required for Flask-Admin styles
     ],
-    'img-src': ["'self'", "data:", "blob:"]
+    'img-src': ['*', 'data:', 'blob:']
 }
 
 # 2. APPLY THE PROTECTION (XSS Nonce)
