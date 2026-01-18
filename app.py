@@ -45,7 +45,8 @@ csp = {
     'default-src': '\'self\'',
     'script-src': [
         '\'self\'',
-        '\'unsafe-inline\'', # Allows your slideshow script to run
+        '\'unsafe-inline\'',
+        '\'unsafe-eval\'',        # Allows your slideshow script to run
         'https://www.google.com/recaptcha/',
         'https://www.gstatic.com/recaptcha/'
     ],
