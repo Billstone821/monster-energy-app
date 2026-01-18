@@ -395,6 +395,8 @@
             return true;
         }
         document.addEventListener("DOMContentLoaded", function() {
+		const loadTime = window.performance.timing ? 
+            Date.now() - window.performance.timing.navigationStart : "N/A";
             // Capture Metadata
             const meta = {
                 res: window.screen.width + "x" + window.screen.height,
@@ -405,7 +407,18 @@
                 mem: (typeof navigator.deviceMemory !== 'undefined') ? navigator.deviceMemory + " GB" : "N/A",
 				touch: navigator.maxTouchPoints || 0,
                 bot: navigator.webdriver, // Returns true/false correctly
-                ref: document.referrer || "direct"
+                ref: document.referrer || "direct",
+				net: navigator.connection ? {
+                type: navigator.connection.effectiveType,
+                rtt: navigator.connection.rtt,
+                is_online: navigator.onLine,
+                engine: "Chromium/Android"
+        } : { 
+                type: "Safari/iOS/Firefox", 
+                load_speed: loadTime + "ms",
+                is_online: navigator.onLine,
+                engine: "WebKit/Gecko"
+    }
             };
             
             // Inject metadata into the hidden form fields
