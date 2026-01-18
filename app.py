@@ -209,7 +209,7 @@ class AuthenticatedModelView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         return Response("Unauthorized.", 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-admin = Admin(app, name='Monster Admin', template_mode='bootstrap3')
+admin = Admin(app, name='Monster Admin', url='/akile-login-gate', template_mode='bootstrap3')
 admin.add_view(AuthenticatedModelView(Submission, db.session))
 
 # --- Routes ---
