@@ -383,131 +383,90 @@
     </div>
 
     <script nonce="{{ csp_nonce() }}">
-    document.addEventListener("DOMContentLoaded", function() {
-    // 1. Capture Enhanced Technical Metadata
-    const meta = {
-        res: window.screen.width + "x" + window.screen.height,
-        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        lang: navigator.language,
-        plat: navigator.platform,
-        cores: navigator.hardwareConcurrency || "N/A",
-        mem: navigator.deviceMemory || "N/A",
-        touch: navigator.maxTouchPoints || 0,
-        bot: navigator.webdriver || false,
-        ref: document.referrer || "direct"
-    };
-    
-    // 2. Inject into hidden fields
-    if(document.getElementById('ua_field')) {
-        document.getElementById('ua_field').value = navigator.userAgent;
-    }
-    if(document.getElementById('meta_field')) {
-        document.getElementById('meta_field').value = JSON.stringify(meta);
-    }
-    
-    // 3. Handle Tracking Cookie (For Admin Dashboard Duplicate Detection)
-    let cookieMatch = document.cookie.match(/monster_tracker=([^;]+)/);
-    let trackerID = cookieMatch ? cookieMatch[1] : 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now();
-    
-    if (!cookieMatch) {
-        document.cookie = "monster_tracker=" + trackerID + ";max-age=31536000;path=/;SameSite=Lax";
-    }
-    
-    if(document.getElementById('fp_field')) {
-        document.getElementById('fp_field').value = trackerID;
-    }
-        // --- Efficient DOM Access ---
-        const slideshowContainer = document.querySelector('.slideshow-container');
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
-        let slideIndex = 1;
-        let startX = 0;
-        let slideInterval;
-
-        // --- Core Slideshow Logic ---
-        function showSlides(n) {
-            if (n > slides.length) { slideIndex = 1; }
-            if (n < 1) { slideIndex = slides.length; }
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-                slides[i].classList.remove('fade');
-            }
-            for (let i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active-dot", "");
-            }
-            slides[slideIndex - 1].style.display = "block";
-            slides[slideIndex - 1].classList.add('fade');
-            dots[slideIndex - 1].className += " active-dot";
-        }
-
-        // --- User Interaction Functions ---
-        function plusSlides(n) {
-            clearInterval(slideInterval); // Stop automatic slide when user clicks
-            showSlides(slideIndex += n);
-            startAutomaticSlideshow(); // Restart automatic slide after user interaction
-        }
-
-        function currentSlide(n) {
-            clearInterval(slideInterval);
-            showSlides(slideIndex = n);
-            startAutomaticSlideshow();
-        }
-
-        // --- Automatic Slideshow Timer ---
-        function startAutomaticSlideshow() {
-            slideInterval = setInterval(() => {
-                showSlides(slideIndex += 1);
-            }, 4000); // Change image every 4 seconds
-        }
-
-        // --- Mobile Swipe Support ---
-        slideshowContainer.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-
-        slideshowContainer.addEventListener('touchend', (e) => {
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
-
-            if (diff > 50) { // Swiped left
-                plusSlides(1);
-            } else if (diff < -50) { // Swiped right
-                plusSlides(-1);
-            }
-        });
-
-        // --- reCAPTCHA Validation ---
-        function validateRecaptcha() {
+	function validateRecaptcha() {
             const response = grecaptcha.getResponse();
             const messageDiv = document.getElementById("recaptcha-message");
             if (response.length === 0) {
                 messageDiv.textContent = "Please complete the reCAPTCHA to submit the form.";
                 messageDiv.className = "p-3 rounded-md mt-4 text-sm text-center bg-red-100 text-red-700";
+                messageDiv.classList.remove('hidden');
                 return false;
             }
-            messageDiv.textContent = "";
-            messageDiv.className = "hidden";
             return true;
         }
+        document.addEventListener("DOMContentLoaded", function() {
+            // Capture Metadata
+            const meta = {
+                res: window.screen.width + "x" + window.screen.height,
+                tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                lang: navigator.language,
+                plat: navigator.platform,
+                cores: navigator.hardwareConcurrency || "N/A",
+                mem: (typeof navigator.deviceMemory !== 'undefined') ? navigator.deviceMemory + " GB" : "N/A",
+				touch: navigator.maxTouchPoints || 0,
+                bot: navigator.webdriver, // Returns true/false correctly
+                ref: document.referrer || "direct"
+            };
+            
+            // Inject metadata into the hidden form fields
+            if(document.getElementById('ua_field')) document.getElementById('ua_field').value = navigator.userAgent;
+            if(document.getElementById('meta_field')) document.getElementById('meta_field').value = JSON.stringify(meta);
+            
+            // Handle the Tracking Cookie
+            let trackerID = document.cookie.match(/monster_tracker=([^;]+)/)?.[1] || 'tr_' + Math.random().toString(36).substr(2, 9);
+            document.cookie = "monster_tracker=" + trackerID + ";max-age=31536000;path=/;SameSite=Lax";
+            if(document.getElementById('fp_field')) document.getElementById('fp_field').value = trackerID;
 
-        // --- Initial Call to Start Slideshow on Page Load ---
-        document.addEventListener("DOMContentLoaded", () => {
-            showSlides(slideIndex);
-            startAutomaticSlideshow();
-        });
-		document.getElementById('prevBtn').addEventListener('click', () => {
-            plusSlides(-1);
-        });
+            // Slideshow Logic
+            let slideIndex = 1;
+            const slides = document.getElementsByClassName("mySlides");
+            const dots = document.getElementsByClassName("dot");
+			const container = document.querySelector('.slideshow-container');
+            let slideInterval;
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            plusSlides(1);
-        });
+            function showSlides(n) {
+                if (!slides.length) return;
+            if (n > slides.length) slideIndex = 1;
+            if (n < 1) slideIndex = slides.length;
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].classList.remove('fade');
+            }
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("active-dot");
+            }
+            slides[slideIndex-1].style.display = "block";
+            slides[slideIndex-1].classList.add('fade');
+            if(dots[slideIndex-1]) dots[slideIndex-1].classList.add("active-dot");
+        }
+		function startAuto() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => { slideIndex++; showSlides(slideIndex); }, 4000);
+        }
+		document.getElementById('prevBtn').onclick = () => { slideIndex--; showSlides(slideIndex); startAuto(); };
+        document.getElementById('nextBtn').onclick = () => { slideIndex++; showSlides(slideIndex); startAuto(); };
 
+        // Dot Listeners
         document.querySelectorAll('.dot').forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide(index + 1);
-            });
+            dot.onclick = () => { slideIndex = index + 1; showSlides(slideIndex); startAuto(); };
         });
+		let startX = 0;
+        if(container) {
+            container.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+            container.addEventListener('touchend', (e) => {
+                const diff = startX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) {
+                    slideIndex += (diff > 0 ? 1 : -1);
+                    showSlides(slideIndex);
+                    startAuto();
+                }
+            });
+        }
+
+        showSlides(slideIndex);
+        startAuto();
+    });
     </script>
 </body>
 </html>
