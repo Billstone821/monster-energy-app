@@ -69,7 +69,7 @@ csp = {
     ],
     'img-src': ["'self'", "data:", "blob:", "*"] # Allows images from anywhere
 }
-Talisman(app, content_security_policy=csp, content_security_policy_nonce=True)
+Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src', 'style-src'])
 
 # 2. APPLY THE PROTECTION (XSS Nonce)
 # This generates the secret nonce you'll use in your HTML
