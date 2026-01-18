@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Monster Energy Drink® Advertising Campaign - Drive & Earn!</title>
-	<script src="https://cdn.tailwindcss.com" nonce="{{ csp_nonce() }}"></script>
-    <script src="https://www.google.com/recaptcha/api.js" nonce="{{ csp_nonce() }}"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" nonce="{{ csp_nonce() }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" nonce="{{ csp_nonce() }}" />
-    <style nonce="{{ csp_nonce() }}">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <style>
         body {
             font-family: "Inter", sans-serif;
             background-color: #f3f4f6;
@@ -354,7 +356,7 @@
                         </div>
                         <p class="text-xs text-gray-400 max-w-xs">
                             1 Monster Way, Corona, CA 92879, USA<br>
-                            © <script nonce="{{ csp_nonce() }}">document.write(new Date().getFullYear())</script> Monster Energy Company. All rights reserved.
+                            © <script>document.write(new Date().getFullYear())</script> Monster Energy Company. All rights reserved.
                         </p>
                     </div>
 
@@ -382,7 +384,7 @@
         </footer>
     </div>
 
-    <script nonce="{{ csp_nonce() }}">
+    <script>
 	function validateRecaptcha() {
             const response = grecaptcha.getResponse();
             const messageDiv = document.getElementById("recaptcha-message");
