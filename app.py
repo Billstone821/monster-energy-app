@@ -46,26 +46,28 @@ csp = {
     'script-src': [
         '\'self\'',
         '\'unsafe-inline\'',
-        '\'unsafe-eval\'',        # Allows your slideshow script to run
+        '\'unsafe-eval\'',
         'https://www.google.com/recaptcha/',
-        'https://www.gstatic.com/recaptcha/'
+        'https://www.gstatic.com/recaptcha/',
+        'https://cdn.tailwindcss.com'
     ],
     'frame-src': [
         '\'self\'',
         'https://www.google.com/recaptcha/',
-        
+        'https://recaptcha.google.com/'
+    ],
     'style-src': [
         '\'self\'',
-        '\'unsafe-inline\'', 
-        'https://fonts.googleapis.com', # Allows Google Fonts
-        'https://cdnjs.cloudflare.com'  # Allows FontAwesome
+        '\'unsafe-inline\'',
+        'https://fonts.googleapis.com',
+        'https://cdnjs.cloudflare.com'
     ],
     'font-src': [
         '\'self\'',
         'https://fonts.gstatic.com',
         'https://cdnjs.cloudflare.com'
     ],
-    'img-src': ["'self'", "data:", "blob:", "*"] # Allows images from anywhere
+    'img-src': ["'self'", "data:", "blob:", "*"]# Allows images from anywhere
 }
 
 # 2. APPLY THE PROTECTION (XSS Nonce)
