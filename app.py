@@ -53,8 +53,7 @@ csp = {
     'frame-src': [
         '\'self\'',
         'https://www.google.com/recaptcha/',
-        'https://recaptcha.google.com/'
-    ],
+        
     'style-src': [
         '\'self\'',
         '\'unsafe-inline\'', 
