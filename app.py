@@ -174,10 +174,16 @@ class Submission(db.Model):
 class AuthenticatedModelView(ModelView):
 # --- UI & FEATURE SETTINGS ---
     can_export = True  # Adds the button to download leads as Excel/CSV
-    column_default_sort = ('id', True)  # Newest leads show up at the top
-    column_searchable_list = ['full_name', 'email', 'phone']  # Adds a search bar
-    column_filters = ['state', 'city']  # Adds dropdown filters on the right
-    page_size = 50  # Shows 50 leads per page instead of 20
+    can_view_details = True
+    column_default_sort = ('id', True) 
+    column_list = [
+        'id', 'full_name', 'email', 'phone', 'state', 
+        'timestamp', 'ip_address', 'fingerprint_id'
+    ]
+    column_searchable_list = ['full_name', 'email', 'phone', 'ip_address'] # Added ip_address here too
+    column_filters = ['state', 'city']  
+    page_size = 100
+    
     def is_accessible(self):
         auth_header = request.headers.get('Authorization')
         if not auth_header: return False
@@ -305,15 +311,3 @@ with app.app_context():
         print("[INFO] Database tables checked/created.")
     except Exception as e:
         print(f"[ERROR] Database creation failed: {e}")
-
-if __name__ == '__main__':
-# 1. First, setup the database tables
-    with app.app_context():
-        db.create_all()
-        print("Database tables created/verified successfully!")
-    
-    # 2. Then, start the website
-    # On Render, 'host' and 'port' are usually handled by the environment
-    # but 0.0.0.0 is safe to keep.
-    app.run(debug=False, host='0.0.0.0', port=5000)
-   
