@@ -40,7 +40,6 @@ api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(co
 
 # --- Flask App Initialization ---
 app = Flask(__name__, template_folder='templates', static_folder='static')
-from flask_talisman import Talisman
 # 1. DEFINE THE SECURITY POLICY
 csp = {
     'default-src': '\'self\'',
@@ -49,8 +48,7 @@ csp = {
         '\'unsafe-inline\'',
         '\'unsafe-eval\'',        # Allows your slideshow script to run
         'https://www.google.com/recaptcha/',
-        'https://www.gstatic.com/recaptcha/',
-        'https://cdn.tailwindcss.com'
+        'https://www.gstatic.com/recaptcha/'
     ],
     'frame-src': [
         '\'self\'',
@@ -70,7 +68,6 @@ csp = {
     ],
     'img-src': ["'self'", "data:", "blob:", "*"] # Allows images from anywhere
 }
-Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src', 'style-src'])
 
 # 2. APPLY THE PROTECTION (XSS Nonce)
 # This generates the secret nonce you'll use in your HTML
