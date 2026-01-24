@@ -137,7 +137,7 @@ def send_monster_email(email, full_name):
     final_subject = spin(raw_subject)
     
     # Randomize the Sender Name metadata
-    final_sender_name = spin("{Campaign Support|Partner Relations|Ad Ops Team}")
+    final_sender_name = spin("{{Campaign|Partner} {Support|Relations|Team|Operations}}")
 
     # 5. Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
