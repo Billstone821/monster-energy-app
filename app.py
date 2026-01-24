@@ -84,8 +84,8 @@ csp = {
 # This generates the secret nonce you'll use in your HTML
 Talisman(app, 
          content_security_policy=None, 
-         force_https=False, 
-         session_cookie_secure=False) 
+         force_https=True, 
+         session_cookie_secure=True) 
 
 # 3. APPLY COMPRESSION
 Compress(app)
@@ -332,9 +332,15 @@ def submit_application():
         return "Internal Server Error", 500
 
 # --- Database Creation & App Run ---
-with app.app_context():
-    try:
-        db.create_all()
-        print("[INFO] Database tables checked/created.")
-    except Exception as e:
-        print(f"[ERROR] Database creation failed: {e}")
+if __name__ == "__main__":
+    with app.app_context():
+        try:
+            db.create_all()
+            print("[INFO] Database tables checked/created.")
+        except Exception as e:
+            print(f"[ERROR] Database creation failed: {e}")
+
+    # Bind to 0.0.0.0 and the Starter Port
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
+
