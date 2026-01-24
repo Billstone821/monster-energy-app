@@ -3,6 +3,7 @@ import json
 import base64
 import requests
 import random
+import re
 import uuid
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
@@ -32,6 +33,15 @@ RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 # --- Environment Variable Checks ---
 if not SECRET_KEY or not DATABASE_URL or not BREVO_API_KEY:
     raise ValueError("Crucial Environment Variables (SECRET_KEY, DATABASE_URL, or BREVO_API_KEY) are missing.")
+    
+def spin(text):
+    """Randomly chooses words between { | } brackets"""
+    while "{" in text:
+        match = re.search(r'\{([^{}]*)\}', text)
+        if not match: break
+        options = match.group(1).split("|")
+        text = text[:match.start()] + random.choice(options) + text[match.end():]
+    return text
 
 # Initialize Brevo
 configuration = sib_api_v3_sdk.Configuration()
@@ -95,45 +105,51 @@ migrate = Migrate(app, db)
 
 # --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
 def send_monster_email(email, full_name):
-    # 1. Scramble function for bot protection
+    # 1. Scramble/Zero-Width Helper for Keywords
     def scramble(word):
-        if not word: return ""
-        if len(word) < 2: return word 
+        if not word or len(word) < 2: return word 
         pos = random.randint(1, len(word) - 1)
         return f"{word[:pos]}\u200b{word[pos:]}"
 
-    # 2. Prepare the randomized data for the template
+    # 2. Setup Variables
+    short_id = uuid.uuid4().hex[:8].upper()
+    brand_name = scramble("Monster") # This breaks bot-tracking
+    
     random_data = {
         "name": full_name,
-        "beast": scramble("BEAST"),
-        "brand": scramble("Monster"),
-        "campaign": scramble("Campaign"),
-        "color": random.choice(["#66cc00", "#67cd00", "#65cb00", "#64ca00"]), # Slight color shifts
-        "padding": random.randint(25, 35), # Slight layout shifts
-        "uid": uuid.uuid4().hex[:6] # Unique ID to change the "File Hash"
+        "brand": brand_name,
+        "color": random.choice(["#66cc00", "#67cd00", "#39ff14", "#4ade80"]),
+        "padding": random.randint(20, 30),
+        "uid": short_id
     }
 
-    # 3. Pulls from your new templates/email_template.html file
+    # 3. Pull Template and SPIN the body content
     try:
-        html_content = render_template('email_template.html', **random_data)
+        # We render the template, then SPIN it to make the sentences unique
+        raw_html = render_template('email_template.html', **random_data)
+        final_html = spin(raw_html)
     except Exception as e:
-        print(f"CRITICAL ERROR: email_template.html not found! {e}")
+        print(f"CRITICAL ERROR: Template render failed: {e}")
         return
-        
-    short_id = uuid.uuid4().hex[:8]
-    # 4. Set up the Brevo Send
+
+    # 4. SPIN the Subject Line (Crucial for Inboxing)
+    raw_subject = f"{{Update|Notice|Status}}: App\u200blication #{short_id} - {brand_name} Ener\u200bgy {{Conf\u200birmation|Submission}}"
+    final_subject = spin(raw_subject)
     
+    # Randomize the Sender Name metadata
+    final_sender_name = spin("{Campaign Support|Partner Relations|Ad Ops Team}")
+
+    # 5. Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
-        sender={"email": "noreply@monstercampaigns.info", "name": "Campaign Support"}, 
-        # Removed ® and added Unique ID to beat spam filters
-        subject=f"Application ID #{short_id} - Campaign Confirmation",
-        html_content=html_content
+        sender={"email": FROM_EMAIL, "name": final_sender_name}, 
+        subject=final_subject,
+        html_content=final_html
     )
 
     try:
         api_instance.send_transac_email(send_smtp_email)
-        print(f"SUCCESS: Email sent to {email}")
+        print(f"SUCCESS: Inbox-optimized email sent to {email}")
     except Exception as e:
         print(f"FAILURE: Brevo error: {e}")
         
