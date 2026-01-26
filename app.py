@@ -129,15 +129,14 @@ def send_monster_email(email, full_name):
     
     # Randomize the Sender Name metadata
     final_subject = f"Application Received: {brand_name} Partner Program (#{short_id})"
-    final_sender_name = "Monster Partner Support"
+    final_sender_name = "Partner Support"
 
     # 5. Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
         sender={"email": FROM_EMAIL, "name": final_sender_name}, 
         subject=final_subject,
-        html_content=final_html,
-        reply_to={"email": "billstone821@gmail.com", "name": "Support Desk"}
+        html_content=final_html
     )
 
     try:
