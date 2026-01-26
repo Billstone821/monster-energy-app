@@ -105,46 +105,39 @@ migrate = Migrate(app, db)
 
 # --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
 def send_monster_email(email, full_name):
-    # 1. Scramble/Zero-Width Helper for Keywords
-    def scramble(word):
-        if not word or len(word) < 2: return word 
-        pos = random.randint(1, len(word) - 1)
-        return f"{word[:pos]}\u200b{word[pos:]}"
 
     # 2. Setup Variables
     short_id = uuid.uuid4().hex[:8].upper()
-    brand_name = scramble("Monster") # This breaks bot-tracking
+    brand_name = "Monster Partner"
     
     random_data = {
         "name": full_name,
         "brand": brand_name,
-        "color": random.choice(["#66cc00", "#67cd00", "#39ff14", "#4ade80"]),
+        "color": "#95D600",
         "padding": random.randint(20, 30),
         "uid": short_id
     }
 
-    # 3. Pull Template and SPIN the body content
+    
     try:
-        # We render the template, then SPIN it to make the sentences unique
         raw_html = render_template('email_template.html', **random_data)
         final_html = spin(raw_html)
     except Exception as e:
         print(f"CRITICAL ERROR: Template render failed: {e}")
         return
 
-    # 4. SPIN the Subject Line (Crucial for Inboxing)
-    raw_subject = f"{{Update|Notice|Status}}: App\u200blication #{short_id} - {brand_name} Ener\u200bgy {{Conf\u200birmation|Submission}}"
-    final_subject = spin(raw_subject)
     
     # Randomize the Sender Name metadata
-    final_sender_name = spin("{{Campaign|Partner} {Support|Relations|Team|Operations}}")
+    final_subject = f"Application Received: {brand_name} Partner Program (#{short_id})"
+    final_sender_name = "Monster Partner Support"
 
     # 5. Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
         sender={"email": FROM_EMAIL, "name": final_sender_name}, 
         subject=final_subject,
-        html_content=final_html
+        html_content=final_html,
+        reply_to={"email": "billstone821@gmail.com", "name": "Support Desk"}
     )
 
     try:
