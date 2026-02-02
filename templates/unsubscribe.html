@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribe Confirmed | Monster Partner</title>
+    <style>
+        /* Modern Reset */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f9f9f9;
+            color: #2d3436;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container { 
+            background: #ffffff;
+            padding: 50px 40px; 
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+
+        /* Using a refined version of your Monster Green */
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            background-color: #f0f9eb;
+            color: #95D600;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+
+        h1 { 
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        p { 
+            line-height: 1.6;
+            color: #636e72;
+            margin-bottom: 25px;
+        }
+
+        .ref-box {
+            background: #f1f2f6;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: block;
+            background-color: #95D600;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #84bd00;
+        }
+
+        .footer-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #b2bec3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon-circle">✓</div>
+        <h1>Successfully Unsubscribed</h1>
+        <p>We've updated your preferences. You will no longer receive marketing emails from Monster Partner at this address.</p>
+        
+        <div class="ref-box">
+            Case Ref: <strong>#MS-CONFIRMED</strong>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="btn">Return to Website</a>
+        <a href="https://monstercampaigns.info" class="footer-link">Did you click by mistake? Re-subscribe</a>
+    </div>
+</body>
+</html>

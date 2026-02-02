@@ -104,10 +104,10 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
-def send_monster_email(email, full_name):
+def send_monster_email(email, full_name, uid):
 
     # 2. Setup Variables
-    short_id = uuid.uuid4().hex[:8].upper()
+    short_id = uid[:8].upper()
     brand_name = "Monster Partner"
     
     random_data = {
@@ -115,7 +115,8 @@ def send_monster_email(email, full_name):
         "brand": brand_name,
         "color": "#95D600",
         "padding": random.randint(20, 30),
-        "uid": short_id
+        "short_id": short_id,
+        "uid": uid
     }
 
     
@@ -128,8 +129,8 @@ def send_monster_email(email, full_name):
 
     
     # Randomize the Sender Name metadata
-    final_subject = f"Application Received: {brand_name} Partner Program (#{short_id})"
-    final_sender_name = "Partner Support"
+    final_subject = f"Regarding your inquiry, {full_name} (Ref: #{short_id})"
+    final_sender_name = "Monster Support Team"
 
     # 5. Brevo Send
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
@@ -229,6 +230,14 @@ def index():
 @app.route('/thankyou')
 def thankyou_page():
     return render_template('thank_you.html')
+    
+   @app.route('/privacy')
+def privacy_page():
+    return render_template('privacy.html')
+
+@app.route('/unsubscribe')
+def unsubscribe_page():
+    return render_template('unsubscribe.html')
 
 @app.route('/sitemap.xml')
 def serve_sitemap():
@@ -268,7 +277,7 @@ def submit_application():
             return "reCAPTCHA failed. Please go back and try again.", 400
             
         uid = str(uuid.uuid4())
-        short_id = uid[:8]
+        
 
         # 3. Save to Database
         # Note: We convert age_check to a Boolean (True/False) for the database
@@ -285,7 +294,7 @@ def submit_application():
             ip_address=ip,
             user_agent=ua,
             browser_metadata=meta,
-            fingerprint_id=fp
+            fingerprint_id=uid
         )
         db.session.add(new_submission)
         db.session.commit()
@@ -299,11 +308,12 @@ def submit_application():
         }
         
         # It picks the 'email' and 'full_name' from Step 1
-        send_monster_email(email, full_name)
+        send_monster_email(email, full_name, uid)
 
         # Send alert to YOUR Telegram (Place this here!)
         alert_text = (
             f"<b>🔥 NEW APPLICATION MONSTER!</b>\n\n"
+            f"<b>🆔 Case Ref:</b> <code>{uid[:8].upper()}</code>\n"
             f"---------------------------\n"
             f"<b>👤 Name:</b> {full_name}\n"
             f"<b>📧 Email:</b> {email}\n"
