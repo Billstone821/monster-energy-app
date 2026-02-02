@@ -135,6 +135,7 @@ def send_monster_email(email, full_name):
     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
         to=[{"email": email, "name": full_name}],
         sender={"email": FROM_EMAIL, "name": final_sender_name}, 
+        reply_to={"email": "support@monstercampaigns.info", "name": "Monster Support"},
         subject=final_subject,
         html_content=final_html
     )
