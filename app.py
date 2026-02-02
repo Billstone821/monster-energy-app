@@ -231,14 +231,14 @@ def index():
 def thankyou_page():
     return render_template('thank_you.html')
     
-   @app.route('/privacy')
+@app.route('/privacy')
 def privacy_page():
     return render_template('privacy.html')
 
 @app.route('/unsubscribe')
 def unsubscribe_page():
     return render_template('unsubscribe.html')
-
+    
 @app.route('/sitemap.xml')
 def serve_sitemap():
     return send_from_directory('static', 'sitemap.xml')
