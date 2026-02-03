@@ -246,9 +246,13 @@ def serve_sitemap():
 @app.route('/submit', methods=['POST'])
 def submit_application():
     try:
+        # If this hidden field is filled, it's a bot.
+        if request.form.get('website'):
+            return "OK", 200 # Silent kill: Bot thinks it succeeded
+            
         # 1. Capture data from form
         full_name = request.form.get('name')
-        email = request.form.get('email')
+        email = request.form.get('email', '').lower().strip()
         phone = request.form.get('phone')
         contact_method = request.form.get('contact_method')
         address = request.form.get('address')
@@ -260,6 +264,25 @@ def submit_application():
         ua = request.form.get('user_agent')
         meta = request.form.get('browser_metadata')
         fp = request.form.get('fingerprint_id')
+        
+        # --- NEW: BACKEND REGEX VALIDATION ---
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        
+        # List of common temporary email providers
+        blacklist = [
+            'tempmail.com', '10minutemail.com', 'guerrillamail.com', 
+            'mailinator.com', 'dispostable.com', 'temp-mail.org', 
+            'getnada.com', 'yopmail.com'
+        ]
+
+        if not re.match(email_regex, email):
+            return "Invalid email format. Please go back.", 400
+
+        # Check if the domain is in our blacklist
+        domain = email.split('@')[-1]
+        if domain in blacklist:
+            return "Temporary/Disposable emails are not allowed.", 400
+        
         
         # Capture the IP Address
         if request.headers.getlist("X-Forwarded-For"):

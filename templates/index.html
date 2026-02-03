@@ -182,9 +182,13 @@
                     action="/submit"
                     onsubmit="return validateRecaptcha();"
                 >
-				    <input type="hidden" name="user_agent" id="ua_field">
-                    <input type="hidden" name="browser_metadata" id="meta_field">
-                    <input type="hidden" name="fingerprint_id" id="fp_field">
+				<div style="display:none !important;" aria-hidden="true">
+                    <label>Please leave this field blank</label>
+                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+				</div>
+				<input type="hidden" name="user_agent" id="ua_field">
+                <input type="hidden" name="browser_metadata" id="meta_field">
+                <input type="hidden" name="fingerprint_id" id="fp_field">
                     <div>
                         <label for="fullName" class="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
                         <input
@@ -202,6 +206,9 @@
                             id="email"
                             name="email"
                             required
+							pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                            title="Please enter a valid email address (e.g., name@domain.com)"
+                            placeholder="Enter your email"
                             class="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                         />
                     </div>
