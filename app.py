@@ -281,7 +281,7 @@ def submit_application():
         # Check if the domain is in our blacklist
         domain = email.split('@')[-1]
         if domain in blacklist:
-            return "Temporary/Disposable emails are not allowed.", 400
+            return "To ensure you receive our partnership updates, please provide a standard email address. We are unable to send responses to temporary or disposable domains.", 400
         
         # --- NEW: DUPLICATE PROTECTION ---
         # Check if this email already exists in our database
