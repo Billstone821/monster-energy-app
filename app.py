@@ -283,6 +283,14 @@ def submit_application():
         if domain in blacklist:
             return "Temporary/Disposable emails are not allowed.", 400
         
+        # --- NEW: DUPLICATE PROTECTION ---
+        # Check if this email already exists in our database
+        existing_user = Submission.query.filter_by(email=email).first()
+        
+        if existing_user:
+            # If they already exist, don't save anything! 
+            # Just show them the thank you page so they don't try again.
+            return render_template('thank_you.html')
         
         # Capture the IP Address
         if request.headers.getlist("X-Forwarded-For"):

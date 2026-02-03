@@ -104,6 +104,27 @@
             from {opacity: .4}
             to {opacity: 1;}
         }
+		button:disabled {
+            background-color: #059669; /* A muted green to show it's locked */
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -481,12 +502,16 @@
 	function validateRecaptcha() {
             const response = grecaptcha.getResponse();
             const messageDiv = document.getElementById("recaptcha-message");
+			const submitBtn = document.querySelector('button[type="submit"]');
             if (response.length === 0) {
                 messageDiv.textContent = "Please complete the reCAPTCHA to submit the form.";
                 messageDiv.className = "p-3 rounded-md mt-4 text-sm text-center bg-red-100 text-red-700";
                 messageDiv.classList.remove('hidden');
                 return false;
             }
+			// --- THE LOGIC HAPPENS HERE ---
+            submitBtn.disabled = true; // 2. Stop further clicks
+            submitBtn.innerHTML = `<span class="spinner"></span> Submitting...`;
             return true;
         }
         document.addEventListener("DOMContentLoaded", function() {
