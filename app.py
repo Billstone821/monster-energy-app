@@ -243,6 +243,13 @@ def terms_page():
 def unsubscribe_page():
     return render_template('unsubscribe.html')
     
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        # This triggers the 'success' state in your contact.html
+        return render_template('contact.html', success=True)
+    return render_template('contact.html')
+    
 @app.route('/sitemap.xml')
 def serve_sitemap():
     return send_from_directory('static', 'sitemap.xml')
