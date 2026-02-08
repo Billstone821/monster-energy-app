@@ -85,8 +85,8 @@ csp = {
 Talisman(app, 
          content_security_policy=None, 
          force_https=True, 
-         session_cookie_secure=True)
-         strict_transport_security=False)         
+         session_cookie_secure=True, 
+         strict_transport_security=False)      
 
 # 3. APPLY COMPRESSION
 Compress(app)
