@@ -246,8 +246,30 @@ def unsubscribe_page():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # This triggers the 'success' state in your contact.html
+        # 1. Capture the form data
+        name = request.form.get('name')
+        email = request.form.get('email')
+        subject = request.form.get('subject') or "General Inquiry"
+        message = request.form.get('message')
+
+        # 2. Format the message for Telegram
+        contact_alert = (
+            f"<b>📩 NEW CONTACT INQUIRY</b>\n\n"
+            f"<b>👤 Name:</b> {name}\n"
+            f"<b>📧 Email:</b> {email}\n"
+            f"<b>📝 Subject:</b> {subject}\n"
+            f"<b>💬 Message:</b>\n{message}"
+        )
+
+        # 3. Send the alert using your existing function
+        try:
+            send_telegram_alert(contact_alert)
+        except Exception as e:
+            print(f"Contact Alert Error: {e}")
+
+        # 4. Trigger the success state in contact.html
         return render_template('contact.html', success=True)
+        
     return render_template('contact.html')
     
 @app.route('/sitemap.xml')
