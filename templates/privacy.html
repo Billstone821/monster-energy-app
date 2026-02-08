@@ -3,28 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | Monster Partner</title>
+    <title>Privacy Policy | Monster Partner Advertising</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f9f9f9; color: #2d3436; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px 0; }
-        .container { background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 600px; width: 90%; }
-        h1 { color: #95D600; font-size: 28px; border-bottom: 2px solid #f0f9eb; padding-bottom: 10px; }
-        h3 { color: #1a1a1a; margin-top: 25px; }
-        p { line-height: 1.6; color: #636e72; }
-        .btn { display: inline-block; margin-top: 30px; background-color: #95D600; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: 600; }
+        /* Exact same styling as the Terms of Service for brand consistency */
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #e0e0e0; background-color: #0a0a0a; padding: 40px 20px; max-width: 900px; margin: auto; }
+        h1 { color: #00ff00; border-bottom: 2px solid #00ff00; padding-bottom: 10px; font-size: 2.5rem; margin-bottom: 10px; }
+        h2 { color: #00ff00; margin-top: 35px; font-size: 1.3rem; border-left: 4px solid #00ff00; padding-left: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        p, li { color: #cccccc; margin-bottom: 15px; }
+        .meta-info { font-style: italic; color: #888; margin-bottom: 30px; font-size: 0.9rem; }
+        .back-link { display: inline-block; margin-top: 40px; color: #00ff00; text-decoration: none; font-weight: bold; transition: 0.3s; padding: 10px 20px; border: 1px solid #00ff00; border-radius: 5px; }
+        .back-link:hover { background-color: #00ff00; color: #000; }
+        .footer-box { margin-top: 50px; padding: 30px 20px; border-top: 1px solid #333; text-align: center; }
+        .footer-disclaimer { font-size: 0.85rem; color: #888; max-width: 600px; margin: 0 auto 15px auto; line-height: 1.4; }
+        .highlight { color: #00ff00; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Privacy Policy</h1>
-        <p>Your privacy is vital to the <strong>Monster Partner Program</strong>. This policy explains how we handle your data.</p>
-        
-        <h3>Information Use</h3>
-        <p>The information provided (Name, Email, Phone, and Location) is used exclusively to assess your qualifications for our advertising programs. We maintain a strict privacy policy and securely store all data; we never sell or distribute your information to third-party marketing agencies.</p>
+    <h1>Privacy Policy</h1>
+    <p class="meta-info">Last Updated: February 8, 2026</p>
 
-        <h3>Security</h3>
-        <p>We implement industry-standard encryption to protect your personal information during transmission and storage.</p>
+    <p>Your privacy is vital to the <span class="highlight">Monster Partner Advertising Campaign</span>. This policy explains how we handle your data and the steps we take to ensure your personal information remains secure.</p>
 
-        <a href="{{ url_for('index') }}" class="btn">Return to Home</a>
+    <h2>1. Information Collection</h2>
+    <p>We collect information necessary to evaluate your application for our advertising program. This includes:</p>
+    <ul>
+        <li><strong>Identity & Contact:</strong> Full Name, Email Address, and Phone Number.</li>
+        <li><strong>Location:</strong> Your primary driving city and region.</li>
+    </ul>
+
+    <h2>2. How We Use Your Data</h2>
+    <p>The information provided is used <span class="highlight">exclusively</span> to assess your qualifications for our advertising programs. This allows us to determine if your driving patterns and location match our current campaign needs.</p>
+
+    <h2>3. Data Security & Encryption</h2>
+    <p>We implement industry-standard encryption to protect your personal information during transmission and storage. Your data is stored on secure servers and access is restricted to authorized recruitment personnel only.</p>
+
+    <h2>4. No Third-Party Sharing</h2>
+    <p>We maintain a strict <strong>Zero-Spam Policy</strong>. We do <span class="highlight">not</span> sell, rent, or distribute your Name, Email, Phone, or Location details to third-party marketing agencies, data brokers, or telemarketers.</p>
+
+    <h2>5. SMS & Communication</h2>
+    <p>By providing your phone number, you agree that <span class="highlight">Monster Partner Advertising Campaign</span> may contact you via text or email regarding the status of your application. You may opt-out of these communications at any time.</p>
+
+    <a href="https://monstercampaigns.info" class="back-link">← Return to Home</a>
+
+    <div class="footer-box">
+        <p class="footer-disclaimer">
+            <strong>Monster Partner Advertising Campaign</strong> is an independent promotional program. 
+            We are a third-party partner and are not directly affiliated with or managed by Monster Energy Corporation.
+        </p>
+        <p style="font-size: 0.75rem; color: #555;">&copy; 2026 Monster Partner Advertising. All rights reserved.</p>
     </div>
 </body>
 </html>
