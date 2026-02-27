@@ -91,7 +91,7 @@ Talisman(app,
 # 3. APPLY COMPRESSION
 Compress(app)
 
-MAINTENANCE_MODE = True
+MAINTENANCE_MODE = False
 
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
