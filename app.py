@@ -90,6 +90,9 @@ Talisman(app,
 
 # 3. APPLY COMPRESSION
 Compress(app)
+
+MAINTENANCE_MODE = False
+
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -104,6 +107,13 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+@app.before_request
+def check_for_maintenance():
+    # Allow static files (images/css) and your secret admin gate to remain accessible
+    allowed_paths = ['/static', '/akile-login-gate']
+    if MAINTENANCE_MODE and not any(request.path.startswith(path) for path in allowed_paths):
+        return render_template('maintenance.html'), 503
+        
 # --- PLACE 1: THE EMAIL MACHINE (UPDATED VERSION) ---
 def send_monster_email(email, full_name, uid):
 
