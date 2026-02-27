@@ -239,6 +239,11 @@ def privacy_page():
 @app.route('/terms')
 def terms_page():
     return render_template('terms.html')
+    
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route('/unsubscribe')
 def unsubscribe_page():
