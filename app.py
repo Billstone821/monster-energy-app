@@ -250,6 +250,10 @@ def privacy_page():
 def terms_page():
     return render_template('terms.html')
     
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico')
+    
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
